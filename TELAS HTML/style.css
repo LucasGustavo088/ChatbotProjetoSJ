@@ -167,3 +167,27 @@ a.article, a.article:hover {
         display: none;
     }
 }
+
+/* Aqui começa página HOME */
+
+#navegacao{
+    background-color: #A9A9A9;
+
+
+}
+
+#img_logo{
+    margin: 10px 15px;
+}
+
+#txtProcurar{
+    width:230px;
+    border-radius: 10px;
+    margin: 15px 0px 0px 300px;
+
+
+}
+
+#header_titulo{
+    margin:-35px 0px 5px 250px;
+}
