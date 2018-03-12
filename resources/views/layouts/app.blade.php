@@ -11,9 +11,10 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
-    <link href="{{ asset('css/estilo.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <!-- <link href="{{ asset('css/estilo.css') }}" rel="stylesheet"> -->
+    <!-- bootstrap 3 -->
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet"> 
     <!-- <link rel="stylesheet" type="text/css" href="{{ asset('css/semantic.min.css') }}"> -->
     <!-- <script src="{{ asset('js/semantic.min.js') }}"></script> -->
 </head>
@@ -32,7 +33,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
 
-                    </ul>
+                    </ul>   
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">

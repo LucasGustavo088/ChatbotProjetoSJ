@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <title>Collapsible sidebar using Bootstrap 3</title>
+
+         <!-- Bootstrap CSS CDN -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <!-- Our Custom CSS -->
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="wrapper">
+            <!-- Sidebar Holder -->
+            <nav id="sidebar">
+                <div class="sidebar-header">
+                    <h3>Cartório SP</h3>
+                </div>
+
+                <ul class="list-unstyled components">
+                    <li class="active">
+                        <a href="#home_menu" data-toggle="collapse" aria-expanded="false"><span class="glyphicon glyphicon-home"></span> Home</a>
+                        <ul class="collapse list-unstyled" id="home_menu">
+                            <li><a href="#"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> Relatório de periodicidade diária</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Chatbot</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> Administrativo</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Atendimento</a>
+                    </li>
+                    <li>
+                        <a href="#"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Relatórios personalizados</a>
+                    </li>
+                    <li>
+                        <a href="#"> <span class="glyphicon glyphicon-signal" aria-hidden="true"></span> Análise</a>
+                    </li>
+                    <li class="active">
+                        <a href="#configuracao_menu" data-toggle="collapse" aria-expanded="false"><span class="glyphicon glyphicon glyphicon-cog" aria-hidden="true"></span> Configurações</a>
+                        <ul class="collapse list-unstyled" id="configuracao_menu">
+                            <li><a href="#"> Conta</a></li>
+                            <li><a href="#"> Perfil</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Page Content Holder -->
+            <div id="content">
+
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid">
+
+                        <div class="navbar-header">
+                            <div class="col-md-2">
+                                <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                                    <i class="glyphicon glyphicon-menu-hamburger"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a href="#">Home</a></li>
+                                <li><a href="#">Relatório</a></li>
+                                <li><a href="#">Administrativo</a></li>
+                                <li><a href="#">Configurações</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+
+                <!-- <h2>Mensagens</h2>
+                <p>mensagens pra encher linguiça  mensagens pra encher linguiça mensagens pra encher linguiça mensagens pra encher linguiça mensagens pra encher linguiça mensagens pra encher linguiça mensagens pra encher linguiçamensagens pra encher linguiça mensagens pra encher linguiça</p> -->
+                
+                <div class="container">
+                    
+                </div>
+                <h2>Pendências de atendimento</h2>
+            
+                <table class="table" id="popular_tabela_atendimento">
+                    <thead>
+                        <tr>
+                            <th>Nome do usuário</th>
+                            <th>Email</th>
+                            <th>Pendências</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+
+
+
+
+        <!-- jQuery CDN -->
+         <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+         <!-- Bootstrap Js CDN -->
+         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+         <script type="text/javascript">
+            var popular_tabela_atendimento = "";
+             $(document).ready(function () {
+                 $('#sidebarCollapse').on('click', function () {
+                     $('#sidebar').toggleClass('active');
+
+                     
+                     
+                 });
+             });
+
+             var linhas = 20;
+             for(i = 0; i < linhas; i++) {
+                console.log('TETE');
+                popular_tabela_atendimento += `<tr>popular_tabela_atendimento
+                    <td>Carinha ${i}</td>
+                    <td>email${i}@teste.com</td>
+                    <td>prioridade ${i}</td>
+                    <td><button class="btn btn-primary"><i class="glyphicon glyphicon-comment"></i> Atender</button></td>
+                </tr>`;
+             }
+
+             $('#popular_tabela_atendimento tbody').append(popular_tabela_atendimento);
+         </script>
+    </body>
+</html>
