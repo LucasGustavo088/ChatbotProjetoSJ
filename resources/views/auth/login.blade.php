@@ -9,6 +9,9 @@
    </span>  
 </div>
 @endif
+<div onclick="$('#email').val('funcionario@email.com'); $('#password').val('funcionario');" style="position: fixed; top:10px; left: 10px; height: 30px; width: 160px;" class="btn-success btn" id="mensagem_alerta">
+   Preencher login   
+</div>
 
 <div class="container-login100">
     <div class="wrap-login100 p-t-20 p-b-20">

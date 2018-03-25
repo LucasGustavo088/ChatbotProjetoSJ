@@ -24,9 +24,9 @@
     });
 
     var linhas = 20;
-    for(i = 0; i < linhas; i++) {
+    for(i = 1; i < linhas; i++) {
         popular_tabela_atendimento += `<tr>popular_tabela_atendimento
-        <td>Carinha ${i}</td>
+        <td>Usuário ${i}</td>
         <td>email${i}@teste.com</td>
         <td>prioridade ${i}</td>
         <td><button class="btn btn-danger"><i class="glyphicon glyphicon-comment"></i> Atender</button></td>

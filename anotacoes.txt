@@ -1,0 +1,68 @@
+Resposta: Para tirar certidão de nascimento é necessário X.
+
+Pergunta 1: como tirar certidão de nascimento?
+Pergunta 2: 
+
+Um pergunta pode possuir N respostas e uma resposta pode possuir N perguntas.
+
+====== caso 1 ======
+certidão, oque é?
+
+
+(tabela) pergunta_resposta:
+  id_pergunta int;
+  id_resposta int;
+  pontuacao int;
+
+1 2 0
+2 2 0 
+3 2 0
+4 2 0
+
+certidão de nascimento.
+
+===== caso 2 ====== 
+usuario pergunta: certidão nascimento
+nosso_banco palavra-chave: certidão de nascimento.
+
+resposta 2: os documentos necessários são... pontuacao = 1;
+resposta 1: tirar certidão de nascimento é necessário...  pontuacao=0; 0;
+
+==== caso 3 ====
+
+pergunta
+desmebrada
+
+
+========= caso 2 + 3 ==============
+palavra chave do cadastro: certidão de nascimento
+
+usuario pergunta: certidão nascimento
+
+
+Pergunta provavael 1: Como tirar certidão:
+#como
+#tirar
+#certidao
+#de
+#nascimento
+Resposta: para tirar a certidão de nascimento é ncessario tal
+  - pontuacao: 0
+
+Pergunta Provavel 2: o que é certidão:
+#o 
+#que
+#é
+#certidao
+Resposta: certidão de nascimento é sla oq
+  - pontuacao: 0;
+
+
+
+
+
+
+
+
+
+

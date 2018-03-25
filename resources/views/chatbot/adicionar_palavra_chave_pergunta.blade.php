@@ -4,28 +4,24 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h2 class="panel-title">
-                <i class="fas fa-sitemap"></i> Resposta (Adicione maneiras diferentes de perguntar o mesmo. Dessa forma, o robô entenderá melhor qual é a resposta associada para esse tópico).
+                <strong>
+                    <i class="fas fa-sitemap"></i> Palavra-chave: Adicione perguntas/respostas associadas ao tópico (palavra-chave). Dessa forma, o robô entenderá melhor qual é a melhor resposta associada a uma pergunta.
+                </strong>
             </h2>
         </div>
         <div class="panel-body">
             <div class="form-group row">
-                <label for="resposta" class="col-sm-2 control-label">Categoria</label>
+                <label for="palavra_chave_principal" class="col-sm-2 control-label">Palavra-chave principal</label>
                 <div class="col-sm-10">
-                    <input type="text" name="categoria" placeholder="Digite a palavra-chave mais forte do tópico" class="form-control" id="resposta" rows="5">
+                    <input type="text" name="palavra_chave_principal" placeholder="Digite a palavra-chave mais forte do tópico" class="form-control" id="palavra_chave_principal" rows="5">
                 </div>
             </div>
-
-            <div class="form-group row">
-                <label for="resposta" class="col-sm-2 control-label">Resposta</label>
-                <div class="col-sm-10">
-                    <textarea type="text" name="resposta" placeholder="Resposta para as perguntas abaixo" class="form-control" id="resposta" rows="5"></textarea>
-                </div>
-            </div>
-            
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h2 class="panel-title">
-                        <i class="fas fa-sitemap"></i> Perguntas 
+                        <strong>
+                            <i class="fas fa-sitemap"></i> Perguntas e respostas associadas ao tópico principal
+                        </strong>
                     </h2>
                 </div>
                 <div class="panel-body">
@@ -52,11 +48,24 @@
 <div id="clone_pergunta" style="display: none;">
     <div class="panel panel-default" id="div_pergunta$id">
         
+        <div class="panel-heading">
+            <div class="panel-title">
+                <strong>
+                    Associação pergunta/resposta #$id
+                </strong>
+            </div>
+        </div>  
         <div class="panel-body">
             <div class="form-group row">
-                <label for="pergunta$id" class="col-sm-2 control-label">Pergunta #$id</label>
+                <label for="pergunta$id" class="col-sm-2 control-label">Pergunta</label>
                 <div class="col-sm-10">
-                    <input type="pergunta$id" name="perguntas[$id][pergunta]" placeholder="Digite uma pergunta" class="form-control col-md-10" id="pergunta$id" rows="5"/>
+                    <input type="pergunta$id" name="perguntas[$id][pergunta]" placeholder="Digite uma pergunta" class="form-control col-md-10" id="pergunta$id"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="resposta" class="col-sm-2 control-label">Resposta</label>
+                <div class="col-sm-10">
+                    <textarea type="text" name="respostas[$id][resposta]" placeholder="Resposta associada a pergunta acima" class="form-control" id="resposta$id" rows="5"></textarea>
                 </div>
             </div>
             <a href="#/" onclick="remover_pergunta($id)" style="float: right;"><i class="fas fa-trash-alt"></i></a>
@@ -64,9 +73,20 @@
     </div>
 </div>
 <script>
+    var palavras_chaves_prefixo_principais = {!! json_encode($palavras_chaves_prefixo_principais, JSON_UNESCAPED_UNICODE) !!} 
+
     $(document).ready(function() {
-        adicionar_pergunta();
+        popular_pergunta();
     });
+
+    function popular_pergunta() {
+        $.each(palavras_chaves_prefixo_principais, function(index, palavra_chave_prefixo) {
+            var id = contador_pergunta
+            adicionar_pergunta();
+
+            $('#pergunta' + id).val(palavra_chave_prefixo + ' (DIGITE O TÓPICO EM QUESTÃO)');
+        });
+    }
 
     var contador_pergunta = 1;
     function adicionar_pergunta() {
