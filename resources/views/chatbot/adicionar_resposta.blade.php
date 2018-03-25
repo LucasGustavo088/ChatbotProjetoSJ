@@ -1,5 +1,5 @@
 @extends('layouts.dashboard_layout') @section('dashboard_content')
-<form action="{{ route('chatbot.p_adicionar_resposta') }}" method="POST">
+<form action="{{ route('chatbot.p_adicionar_palavra_chave_pergunta') }}" method="POST">
     {{ csrf_field() }}
     <div class="panel panel-default">
         <div class="panel-heading">

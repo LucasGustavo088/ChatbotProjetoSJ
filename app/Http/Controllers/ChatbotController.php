@@ -30,11 +30,11 @@ class ChatbotController extends Controller
         echo json_encode($respostas);
     }
 
-    public function adicionar_resposta() {
-        return view('chatbot.adicionar_resposta');
+    public function adicionar_palavra_chave_pergunta() {
+        return view('chatbot.adicionar_palavra_chave_pergunta');
     }
 
-    public function p_adicionar_resposta(Request $request) {
+    public function p_adicionar_palavra_chave_pergunta(Request $request) {
         $resposta = new Resposta();
 
         $resposta->categoria = $request->categoria;
