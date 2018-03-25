@@ -1,69 +1,114 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+@if ($errors->has('email'))
+<div onclick="$('#mensagem_alerta').hide();" style="position: fixed; top:0px; left: 200px; right: 200px;" class="btn-danger btn" id="mensagem_alerta">
+   E-mail ou senha inválidos.   
+   <span style="float: right;" >
+       X
+   </span>  
+</div>
+@endif
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
-
-                        <div class="form-group row">
-                            <label for="email" class="col-sm-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
-
-                                @if ($errors->has('email'))
-                                    <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
-
-                                @if ($errors->has('password'))
-                                    <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-
-                                <a class="btn btn-link" href="{{ route('password.request') }}">
-                                    {{ __('Forgot Your Password?') }}
-                                </a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+<div class="container-login100">
+    <div class="wrap-login100 p-t-20 p-b-20">
+        <form class="login100-form validate-form" method="POST" action="{{ route('login') }}">
+            @csrf
+            <span class="login100-form-avatar">
+                <img src="images/cartorio-sp.png" alt="AVATAR">
+            </span>
+            <div class="wrap-input100 validate-input m-t-85 m-b-35" data-validate = "Enter username">
+                <input id="email" type="email" class="input100 {{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
+                <span class="focus-input100" data-placeholder="login"></span>
             </div>
-        </div>
+            
+            <div class="wrap-input100 validate-input m-b-50" data-validate="Enter password">
+                <input id="password" type="password" class="input100 {{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
+                <span class="focus-input100" data-placeholder="Senha"></span>
+            </div>
+
+            @if ($errors->has('password'))
+                <span class="invalid-feedback">
+                    <strong>{{ $errors->first('password') }}</strong>
+                </span>
+            @endif
+            <div class="container-login100-form-btn">
+                <button type="submit" class="login100-form-btn">
+                    {{ __('Login') }}
+                </button>
+            </div>
+        </form>
     </div>
 </div>
+<div id="dropDownSelect1"></div>
+<script>
+            
+    $(document).ready(function() {
+
+        /*==================================================================
+        [ Focus input ]*/
+        $('.input100').each(function(){
+            $(this).on('blur', function(){
+                if($(this).val().trim() != "") {
+                    $(this).addClass('has-val');
+                }
+                else {
+                    $(this).removeClass('has-val');
+                }
+            })    
+        })
+    
+    
+        /*==================================================================
+        [ Validate ]*/
+        var input = $('.validate-input .input100');
+
+        // $('.validate-form').on('submit',function(){
+        // 	var check = true;
+
+        // 	for(var i=0; i<input.length; i++) {
+        // 		if(validate(input[i]) == false){
+        // 			showValidate(input[i]);
+        // 			check=false;
+        // 		}
+        // 	}
+
+        // 	return check;
+        // });
+
+
+        $('.validate-form .input100').each(function(){
+            $(this).focus(function(){
+            hideValidate(this);
+            });
+        });
+
+        function validate (input) {
+            if($(input).attr('type') == 'email' || $(input).attr('name') == 'email') {
+                if($(input).val().trim().match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/) == null) {
+                    return false;
+                }
+            }
+            else {
+                if($(input).val().trim() == ''){
+                    return false;
+                }
+            }
+        }
+
+        function showValidate(input) {
+            var thisAlert = $(input).parent();
+
+            $(thisAlert).addClass('alert-validate');
+        }
+
+        function hideValidate(input) {
+            var thisAlert = $(input).parent();
+
+            $(thisAlert).removeClass('alert-validate');
+        }
+        
+        
+    });
+</script>
 @endsection
