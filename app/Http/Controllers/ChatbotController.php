@@ -51,7 +51,6 @@ class ChatbotController extends Controller
         foreach($respostas as $resposta) {
             //Quebrando a resposta em várias palavras chaves.
             $palavras_chaves_resposta = explode(' ', $resposta);
-            dd($palavras_chaves_resposta);
         }
 
         $perguntas = $request->perguntas;
