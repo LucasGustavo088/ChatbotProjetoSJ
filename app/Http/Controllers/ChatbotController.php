@@ -36,7 +36,7 @@ class ChatbotController extends Controller
     public function listar_perguntas_respostas_ajax() {
         $respostas = Resposta::orderBy('CRIADO', 'desc');
 
-        echo json_encode($respostas);
+        echo $respostas;
     }
 
     public function adicionar_palavra_chave_pergunta() {
@@ -46,19 +46,64 @@ class ChatbotController extends Controller
 
     public function p_adicionar_palavra_chave_pergunta(Request $request) {
 
+        $palavra_chave_principal = $request->palavra_chave_principal;
+        $palavra_chave_principal = new PalavraChave();
+        $palavra_chave_principal->PALAVRA_CHAVE_PRINCIPAL = '1';
+        $palavra_chave_principal->ATIVO = '1';
+        $palavra_chave_principal->DATA_CRIACAO = date('Y-m-d');
+        $palavra_chave_principal->DATA_ATUALIZACAO = date('Y-m-d');
+        $palavra_chave_principal->save();
+
         $respostas = $request->respostas;
-        
-        foreach($respostas as $resposta) {
-            //Quebrando a resposta em várias palavras chaves.
-            $palavras_chaves_resposta = explode(' ', $resposta);
+
+        foreach($respostas as $resposta)  {
+            $resposta_cadastro = new Resposta();
         }
 
         $perguntas = $request->perguntas;
+        //Quebrando a resposta e perguntas em várias palavras chaves.
+        $palavras_chaves_resposta = [];
+        foreach($respostas as $resposta) {
+            $palavras_chaves_resposta[] = $this->transformar_string_palavras_chave($resposta['resposta']);
+            $palavra_chave_principal = new PalavraChave();
+            $palavra_chave_principal->ATIVO = '1';
+            $palavra_chave_principal->DATA_CRIACAO = date('Y-m-d');
+            $palavra_chave_principal->DATA_ATUALIZACAO = date('Y-m-d');
+            $palavra_chave_principal->save();
+        }
+
+        //Quebrando a resposta e perguntas em várias palavras chaves.
+        $palavras_chaves_pergunta = [];
+        foreach($perguntas as $pergunta) {
+            $palavras_chaves_pergunta[] = $this->transformar_string_palavras_chave($pergunta['pergunta']);
+            $palavra_chave_principal = new PalavraChave();
+            $palavra_chave_principal->ATIVO = '1';
+            $palavra_chave_principal->DATA_CRIACAO = date('Y-m-d');
+            $palavra_chave_principal->DATA_ATUALIZACAO = date('Y-m-d');
+            $palavra_chave_principal->save();
+        }
+
         $resposta = new Resposta();
         $resposta->resposta = $request->resposta;
         $resposta->save();
 
         return view('chatbot.listar_perguntas_respostas');
 
+    }
+
+    public function transformar_string_palavras_chave($string) {
+        $palavras_chave = [];
+        $palavras_chave = explode(' ', $this->escapar_caracteres_notacao($string));
+        return $palavras_chave;
+    }
+
+    public function escapar_caracteres_notacao($string) {
+        $string = str_replace('(', '', $string);
+        $string = str_replace(')', '', $string);
+        $string = str_replace('.', '', $string);
+        $string = str_replace('?', '', $string);
+        $string = str_replace('!', '', $string);
+
+        return $string;
     }
 }
