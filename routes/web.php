@@ -27,4 +27,5 @@ Route::group(['prefix' => 'chatbot'], function() {
     Route::post('p_adicionar_palavra_chave_pergunta', 'ChatbotController@p_adicionar_palavra_chave_pergunta')->name('chatbot.p_adicionar_palavra_chave_pergunta');
 });
 
+Route::post('chatbot_dialog/obter_resposta_ajax', 'ChatbotDialogController@obter_resposta_ajax')->name('chatbotdialog.obter_resposta_ajax');
 

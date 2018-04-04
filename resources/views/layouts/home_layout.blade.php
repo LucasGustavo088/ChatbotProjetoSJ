@@ -22,6 +22,9 @@
     <script src="{{ asset('vendor/bootstrap/js/popper.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
     <!--===============================================================================================-->
+
+    <script src="{{ asset('fonts\fontawesome-free-5.0.8\svg-with-js\js\fontawesome-all.js') }}"></script>
+    
     
 </head>
 <body>

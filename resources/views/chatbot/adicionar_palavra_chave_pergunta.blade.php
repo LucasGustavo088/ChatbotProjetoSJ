@@ -13,7 +13,7 @@
             <div class="form-group row">
                 <label for="palavra_chave_principal" class="col-sm-2 control-label">Palavra-chave principal</label>
                 <div class="col-sm-10">
-                    <input type="text" name="palavra_chave_principal" placeholder="Digite a palavra-chave mais forte do tópico" class="form-control" id="palavra_chave_principal" rows="5">
+                    <input type="text" required name="palavra_chave_principal" placeholder="Digite a palavra-chave mais forte do tópico" class="form-control" id="palavra_chave_principal" rows="5">
                 </div>
             </div>
             <div class="panel panel-default">
