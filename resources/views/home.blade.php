@@ -72,7 +72,7 @@
         <div class="col-md-10 col-xs-10">
             <div class="messages msg_sent">
                 <p>$mensagem</p>
-                <time datetime="2009-11-13T20:00">dados_usuario.nome • 0 min</time>
+                <time datetime="2009-11-13T20:00">dados_usuario.nome • Agora mesmo</time>
             </div>
         </div>
         <div class="col-md-2 col-xs-2 avatar">
@@ -83,14 +83,14 @@
 
 <!-- CLONES -->
 <div id="clone_chatbot_mensagem" style="display: none;">
-    <div class="row msg_container base_receive">
+    <div class="row msg_container base_receive" id="clone_chatbot_mensagem$id">
         <div class="col-md-2 col-xs-2 avatar">
             <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
         </div>
         <div class="col-xs-10 col-md-10">
             <div class="messages msg_receive">
                 <p>$mensagem</p>
-                <time datetime="2009-11-13T20:00">Chatbot • 0 min</time>
+                <time datetime="2009-11-13T20:00">Chatbot • Agora mesmo <button onclick="finalizar_chatbot()" style="width: 57px; height: 20px; font-size: 8px;" class="btn btn-success" type="button">Satisfeito?</button></time>
             </div>
         </div>
     </div>
@@ -189,6 +189,12 @@
             scroll_down_mensagem_enviada();
         }, 200);
     } 
+  }
+
+  function finalizar_chatbot() {
+    $('#base_mensagens').html('');
+    console.log('tete');
+    $('#base_mensagens').append('<br><br><h4 style="text-align: center"><strong>Obrigado!</strong></h4>');
   }
 
   function salvar_informacoes_usuario() {
