@@ -90,7 +90,7 @@
         <div class="col-xs-10 col-md-10">
             <div class="messages msg_receive">
                 <p>$mensagem</p>
-                <time datetime="2009-11-13T20:00">Chatbot • Agora mesmo <button onclick="finalizar_chatbot()" style="width: 57px; height: 20px; font-size: 8px;" class="btn btn-success" type="button">Satisfeito?</button></time>
+                <time datetime="2009-11-13T20:00">Chatbot • Agora mesmo <button onclick="finalizar_chatbot()" style="width: 57px; height: 20px; font-size: 8px;" class="btn btn-success satisfacao" type="button">Satisfeito?</button></time>
             </div>
         </div>
     </div>
@@ -125,6 +125,7 @@
     nome: '',
     email: '' 
   };
+  var contador_clone_chatbot_mensagem = 0;
 
   $(document).ready(function() {
       inicializar_chatbot();
@@ -193,8 +194,7 @@
 
   function finalizar_chatbot() {
     $('#base_mensagens').html('');
-    console.log('tete');
-    $('#base_mensagens').append('<br><br><h4 style="text-align: center"><strong>Obrigado!</strong></h4>');
+    $('#base_mensagens').append('<br><br><h4 style="text-align: center"><strong>Obrigado!</strong></h4><br><br><br><button type="button" class="btn btn-success" style="margin-left: 60px;" onclick="inicializar_chatbot();">Perguntar novamente</button>');
   }
 
   function salvar_informacoes_usuario() {
@@ -207,11 +207,12 @@
       $('#base_mensagens #identificacao').remove();
       $('#mensagem_input').prop('disabled', false);
 
-      adicionar_mensagem_bot("Olá " + dados_usuario.nome + ". Em que posso te ajudar?");
+      adicionar_mensagem_bot("Olá " + dados_usuario.nome + ". Em que posso te ajudar?", true);
     }
   }
 
   function inicializar_chatbot() {
+    $('#base_mensagens').html('');
     adicionar_identificacao();
     colocar_tela_chatbot_canto();
   }
@@ -256,8 +257,8 @@
     }
   }
 
-  function adicionar_mensagem_bot(mensagem, perguntar_satisfacao) {
-    
+  function adicionar_mensagem_bot(mensagem, nao_perguntar_satisfacao) {
+    console.log(nao_perguntar_satisfacao)
     if(typeof mensagem != 'undefined') {
       mensagem_chatbot = mensagem;
     } else {
@@ -266,7 +267,14 @@
 
     var clone_usuario_chatbot = $('#clone_chatbot_mensagem').html();
     clone_usuario_chatbot = str_replace('$mensagem', mensagem_chatbot, clone_usuario_chatbot);
+    clone_usuario_chatbot = str_replace('$id', contador_clone_chatbot_mensagem, clone_usuario_chatbot);
+
     $('#base_mensagens').append(clone_usuario_chatbot);
+
+    if(nao_perguntar_satisfacao) {
+      $('#clone_chatbot_mensagem' + contador_clone_chatbot_mensagem + ' .satisfacao').remove();
+    }
+    contador_clone_chatbot_mensagem++;
   }
 
   function str_replace(find,replaceTo, str){
