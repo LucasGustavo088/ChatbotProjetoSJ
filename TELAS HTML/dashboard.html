@@ -118,18 +118,22 @@
                  });
              });
 
-             var linhas = 20;
-             for(i = 0; i < linhas; i++) {
-                console.log('TETE');
+
+             for(i = 0; i < pendencias; i++) {
                 popular_tabela_atendimento += `<tr>popular_tabela_atendimento
                     <td>Carinha ${i}</td>
                     <td>email${i}@teste.com</td>
                     <td>prioridade ${i}</td>
-                    <td><button class="btn btn-danger"><i class="glyphicon glyphicon-comment"></i> Atender</button></td>
+                    <td><button class="btn btn-danger"><i class="glyphicon glyphicon-comment" onclick="redirecionar_para_atendimento();"></i> Atender</button></td>
                 </tr>`;
              }
 
              $('#popular_tabela_atendimento tbody').append(popular_tabela_atendimento);
+
+
+             function redirecionar_para_atendimento() {
+                window.open("{{ route('atendimento') }}");
+             }
          </script>
     </body>
 </html>
