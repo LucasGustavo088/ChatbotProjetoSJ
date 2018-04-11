@@ -15,7 +15,8 @@ class DashboardController extends Controller
         return view('dashboard.home');
     }
 
-    public function atendimento() {
+    public function atendimento(Request $request) {
+        dd($request);
         return view('dashboard.atendimento');
     }
 

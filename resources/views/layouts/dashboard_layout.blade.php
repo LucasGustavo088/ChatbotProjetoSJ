@@ -47,7 +47,7 @@
                 </ul>
             </li>
             <li>
-                <a href=" {{ route('atendimento') }} "><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Atendimento</a>
+                <!-- <a href=" {{-- route('atendimento') --}} "><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Atendimento</a> -->
             </li>
             <li>
                 <a href="#chatbot_menu" data-toggle="collapse" aria-expanded="false"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Chatbot</a>

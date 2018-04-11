@@ -29,8 +29,12 @@
         <td>Usuário ${i}</td>
         <td>email${i}@teste.com</td>
         <td>prioridade ${i}</td>
-        <td><button class="btn btn-danger"><i class="glyphicon glyphicon-comment"></i> Atender</button></td>
+        <td><button onClick="redirecionar_para_atendimento(${i});" class="btn btn-danger"><i class="glyphicon glyphicon-comment"></i> Atender</button></td>
         </tr>`;
+    }
+
+    function redirecionar_para_atendimento(id_atendimento) {
+       window.open("{{ url('dashboard','atendimento') }}/" + id_atendimento, '_blank');
     }
 
     $('#popular_tabela_atendimento tbody').append(popular_tabela_atendimento);
