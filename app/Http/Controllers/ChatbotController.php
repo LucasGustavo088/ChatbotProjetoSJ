@@ -25,8 +25,8 @@ class ChatbotController extends Controller
         $this->middleware('auth');
     }
 
-    public function listar_perguntas_respostas() {
-        return view('chatbot.listar_perguntas_respostas');
+    public function listar_topicos() {
+        return view('chatbot.listar_topicos');
     }
 
     public function configuracoes_chatbot() {

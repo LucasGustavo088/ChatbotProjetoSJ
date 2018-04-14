@@ -52,7 +52,7 @@
             <li>
                 <a href="#chatbot_menu" data-toggle="collapse" aria-expanded="false"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Chatbot</a>
                 <ul class="collapse list-unstyled" id="chatbot_menu">
-                    <li class="nav-item"><a href="{{ route('chatbot.listar_perguntas_respostas') }}"><i class="fas fa-sitemap"></i> Perguntas e respostas</a></li>
+                    <li class="nav-item"><a href="{{ route('chatbot.listar_topicos') }}"><i class="fas fa-sitemap"></i> Perguntas e respostas</a></li>
                     <li><a href="{{ route('chatbot.configuracoes') }}"><i class="fas fa-cog"></i> Configurações</a></li>
                 </ul>
                 
