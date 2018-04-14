@@ -40,13 +40,38 @@ class ChatbotController extends Controller
     public function listar_topicos_ajax() {
 
 
-        $topicos_principais = PalavraChave::where('PALAVRA_CHAVE_PRINCIPAL', '1')->orderBy('CRIADO', 'desc');
-        echo json_encode($topicos_principais);
+        $topicos_principais = PalavraChave::where('PALAVRA_CHAVE_PRINCIPAL', '1')->orderBy('DATA_CRIACAO', 'desc')->get();
+
+        foreach ($topicos_principais as $key => $topico) {
+            $botao_editar = '<a href="' . url('chatbot/editar_palavra_chave_pergunta', array($topico->ID)) .  '" class="btn btn-default"><i class="fas fa-pencil-alt"></i> Editar cadastro</a>';                                                                       
+            $aaData[] = [
+                $topico->ID,
+                $topico->NOME,
+                date('d/m/Y', strtotime($topico->DATA_CRIACAO)),
+                $botao_editar
+            ];
+        }
+        
+
+        $resultados = ["sEcho" => 1,
+            "iTotalRecords" => count($aaData),
+            "iTotalDisplayRecords" => count($aaData),
+            "aaData" => $aaData];
+
+
+        echo json_encode($resultados);
     }
 
     public function adicionar_palavra_chave_pergunta() {
         return view('chatbot.adicionar_palavra_chave_pergunta')
             ->with('palavras_chaves_prefixo_principais', (object) $this->palavras_chaves_prefixo_principais);
+    }
+
+    public function editar_palavra_chave_pergunta(Request $request) {
+
+
+        return view('chatbot.editar_palavra_chave_pergunta')
+            ->with('cadastro', []);
     }
 
     public function p_adicionar_palavra_chave_pergunta(Request $request) {

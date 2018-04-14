@@ -27,6 +27,7 @@ Route::group(['prefix' => 'chatbot'], function() {
     Route::get('listar_perguntas_respostas_ajax', 'ChatbotController@listar_perguntas_respostas_ajax');
     Route::get('listar_topicos', 'ChatbotController@listar_topicos')->name('chatbot.listar_topicos');
     Route::get('adicionar_palavra_chave_pergunta', 'ChatbotController@adicionar_palavra_chave_pergunta')->name('chatbot.adicionar_palavra_chave_pergunta');
+    Route::get('editar_palavra_chave_pergunta/{id}', 'ChatbotController@editar_palavra_chave_pergunta');
     Route::post('p_adicionar_palavra_chave_pergunta', 'ChatbotController@p_adicionar_palavra_chave_pergunta')->name('chatbot.p_adicionar_palavra_chave_pergunta');
 });
 
