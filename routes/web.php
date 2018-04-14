@@ -22,7 +22,7 @@ Route::get('/dashboard', 'DashboardController@home')->name('home');
 Route::get('/dashboard/atendimento/{id}', 'DashboardController@atendimento');
 
 Route::group(['prefix' => 'chatbot'], function() {  
-    Route::get('listar_perguntas_respostas', 'ChatbotController@listar_perguntas_respostas')->name('chatbot.listar_perguntas_respostas');
+    Route::get('listar_topicos_ajax', 'ChatbotController@listar_topicos_ajax')->name('chatbot.listar_topicos_ajax');
     Route::get('configuracoes', 'ChatbotController@configuracoes')->name('chatbot.configuracoes');
     Route::get('listar_perguntas_respostas_ajax', 'ChatbotController@listar_perguntas_respostas_ajax');
     Route::get('adicionar_palavra_chave_pergunta', 'ChatbotController@adicionar_palavra_chave_pergunta')->name('chatbot.adicionar_palavra_chave_pergunta');

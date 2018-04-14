@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Pergunta extends Model
+class PerguntaHasResposta extends Model
 {
-    protected $table = 'resposta';
     public $timestamps = false;
-    
+    protected $table = 'pergunta_has_resposta';
 }

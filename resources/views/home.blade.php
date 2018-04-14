@@ -286,6 +286,7 @@
   }
 
   function obter_resposta_ajax(mensagem_usuario) {
+    
     var mensagem_chatbot = '';
     $.ajax({
         url: '/chatbot_dialog/obter_resposta_ajax',

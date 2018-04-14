@@ -29,4 +29,6 @@ class HomeController extends Controller
     public function atendimento_usuario() {
         return view('atendimento_usuario');
     }
+
+    // public f
 }

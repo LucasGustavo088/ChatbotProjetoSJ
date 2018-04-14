@@ -60,44 +60,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`pergunta` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
-
--- -----------------------------------------------------
--- Table `mydb`.`atendimento`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`atendimento` (
-  `ID` INT(11) NOT NULL AUTO_INCREMENT,
-  `DESCRICAO` VARCHAR(45) NOT NULL,
-  `ATIVO` TINYINT(4) NULL DEFAULT NULL,
-  `DATA_ATUALIZACAO` DATETIME NULL DEFAULT NULL,
-  `DATA_CRIACAO` DATETIME NULL DEFAULT NULL,
-  `ID_ATENDENTE` INT(11) NOT NULL,
-  `ID_CLIENTE` INT(11) NOT NULL,
-  `ID_PERGUNTA` INT(11) NOT NULL,
-  `DURACAO_ATENDIMENTO` INT(11) NULL DEFAULT NULL,
-  `QTD_TENTATIVA` INT(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  INDEX `fk_ATENDIMENTO_ATENDENTE_idx` (`ID_ATENDENTE` ASC),
-  INDEX `fk_ATENDIMENTO_CLIENTE1_idx` (`ID_CLIENTE` ASC),
-  INDEX `fk_ATENDIMENTO_PERGUNTA1_idx` (`ID_PERGUNTA` ASC),
-  CONSTRAINT `fk_ATENDIMENTO_ATENDENTE`
-    FOREIGN KEY (`ID_ATENDENTE`)
-    REFERENCES `mydb`.`atendente` (`ID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_ATENDIMENTO_CLIENTE1`
-    FOREIGN KEY (`ID_CLIENTE`)
-    REFERENCES `mydb`.`cliente` (`ID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_ATENDIMENTO_PERGUNTA1`
-    FOREIGN KEY (`ID_PERGUNTA`)
-    REFERENCES `mydb`.`pergunta` (`ID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
-
-
 -- -----------------------------------------------------
 -- Table `mydb`.`resposta`
 -- -----------------------------------------------------
@@ -319,7 +281,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `mydb`.`atendimento_has_pergunta`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`atendimento_has_pergunta` (
-  `ID` INT(11) NOT NULL,
+  `ID` INT(11) NOT NULL AUTO_INCREMENT,
   `ID_PERGUNTA` INT(11) NOT NULL,
   `ID_RESPOSTA` INT(11) NOT NULL,
   INDEX `fk_table1_pergunta1_idx` (`ID_PERGUNTA` ASC),
@@ -337,7 +299,18 @@ CREATE TABLE IF NOT EXISTS `mydb`.`atendimento_has_pergunta` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+CREATE TABLE pergunta_has_resposta (
+  ID INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    ID_PERGUNTA INT(11) NULL,
+    ID_RESPOSTA INT(11) NULL,
+    PONT_RESPOSTA INT(11) NULL DEFAULT '0',
+    CONSTRAINT fk_pergunta_has_resposta_1 FOREIGN KEY (ID_PERGUNTA) REFERENCES pergunta(ID),
+    CONSTRAINT fk_pergunta_has_resposta_2 FOREIGN KEY (ID_RESPOSTA) REFERENCES resposta(ID)
+);
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+insert into `users` (`email`, `name`, `password`, `updated_at`, `created_at`) values ('funcionario@email.com', 'Funcionario', '$2y$10$cf22WIcjgw99j1E1DS16wOgma1ofXdAqPc/XjN/7uyKl8zZx0E84.', '2018-03-24 16:04:24', '2018-03-24 16:04:24');

@@ -9,7 +9,7 @@
     <thead>
         <tr>
             <th>ID</th>
-            <th>Resposta</th>
+            <th>Tópico principal</th>
             <th>Data de criação</th>
             <th>Ações</th>
         </tr>
@@ -22,7 +22,7 @@
 <script>
     $(document).ready(function() {
         $('.datatable').DataTable( {
-            ajax: '/chatbot/listar_perguntas_respostas_ajax'
+            ajax: '/chatbot/listar_topicos_ajax'
         });
     });
 </script>

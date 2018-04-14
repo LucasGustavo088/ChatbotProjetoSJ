@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Resposta as Resposta;
 use App\Models\PalavraChave as PalavraChave;
+use App\Models\PerguntaHasResposta as PerguntaHasResposta;
+use App\Models\Pergunta as Pergunta;
 use App\Models\PalavraChaveHasResposta as PalavraChaveHasResposta;
 
 class ChatbotController extends Controller
@@ -35,10 +37,11 @@ class ChatbotController extends Controller
         $respostas = Resposta::orderBy('CRIADO', 'desc');
     }
 
-    public function listar_perguntas_respostas_ajax() {
-        $respostas = Resposta::orderBy('CRIADO', 'desc');
+    public function listar_topicos_ajax() {
 
-        echo json_encode($respostas);
+
+        $topicos_principais = PalavraChave::where('PALAVRA_CHAVE_PRINCIPAL', '1')->orderBy('CRIADO', 'desc');
+        echo json_encode($topicos_principais);
     }
 
     public function adicionar_palavra_chave_pergunta() {
@@ -68,6 +71,20 @@ class ChatbotController extends Controller
             $resposta_cadastro->DATA_ATUALIZACAO = date('Y-m-d');
             $resposta_cadastro->ATIVO = '1';
             $resposta_cadastro->save();
+
+            $pergunta_cadastro = new Pergunta();
+            $pergunta_cadastro->DESCRICAO = $perguntas[$key]['pergunta'];
+            $pergunta_cadastro->DATA_CRIACAO = date('Y-m-d');
+            $pergunta_cadastro->DATA_ATUALIZACAO = date('Y-m-d');
+            $pergunta_cadastro->ATIVO = '1';
+            $pergunta_cadastro->save();
+
+            $pergunta_has_resposta = new PerguntaHasResposta();
+            $pergunta_has_resposta->ID_PERGUNTA = $pergunta_cadastro->id;
+            $pergunta_has_resposta->ID_RESPOSTA = $resposta_cadastro->id;
+            $pergunta_has_resposta->DATA_CRIACAO = date('Y-m-d');
+            $pergunta_has_resposta->DATA_ATUALIZACAO = date('Y-m-d');
+            $pergunta_has_resposta->PONT_RESPOSTA = '0';
 
             //Quebrando a resposta e perguntas em várias palavras chaves.
             $palavras_chaves_resposta[] = $this->transformar_string_palavras_chave($resposta['resposta'])[0];
