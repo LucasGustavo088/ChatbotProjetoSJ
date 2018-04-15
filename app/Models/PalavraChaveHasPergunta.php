@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Pergunta extends Model
+class PalavraChaveHasPergunta extends Model
 {
-    protected $table = 'pergunta';
+    protected $table = 'palavra_chave_has_pergunta';
     public $timestamps = false;
-    
 }

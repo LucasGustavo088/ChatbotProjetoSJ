@@ -98,6 +98,20 @@
             </div>
         </nav>
         
+        @if (!empty($_SESSION['alertas']))
+            @foreach ($_SESSION['alertas'] as $key => $alerta)
+            <div class="container-row alert alert-{{ $alerta['tipo'] }}" id="alerta{{ $key }}">
+                
+                {{ $alerta['mensagem'] }}
+
+                <a style="float: right; cursor: pointer;" onclick="remover_alerta({{ $key }})">
+                    X
+                </a>
+            </div>
+            @endforeach
+        @endif
+        
+
         <div class="container-row">
             <?php 
                 $url = Request::getRequestUri();
@@ -136,6 +150,19 @@
         str = str.replace(re,replaceTo);
 
         return str;
+    }
+
+    function remover_alerta(id) {
+        $('#alerta' + id).remove();
+
+        $.ajax({
+            url: '/utilizador/remover_alerta/' + id,
+            dataType: 'json',
+            method: 'get',
+            data: {
+                '_token': "{{ csrf_token() }}"
+            },
+        });
     }
 
 </script>

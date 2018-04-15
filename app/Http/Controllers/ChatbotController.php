@@ -8,6 +8,9 @@ use App\Models\PalavraChave as PalavraChave;
 use App\Models\PerguntaHasResposta as PerguntaHasResposta;
 use App\Models\Pergunta as Pergunta;
 use App\Models\PalavraChaveHasResposta as PalavraChaveHasResposta;
+use App\Models\PalavraChaveHasPergunta as PalavraChaveHasPergunta;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers;
 
 class ChatbotController extends Controller
 {
@@ -26,6 +29,7 @@ class ChatbotController extends Controller
     }
 
     public function listar_topicos() {
+        // UtilizadorController::alerta('teste', 'danger');
         return view('chatbot.listar_topicos');
     }
 
@@ -40,15 +44,17 @@ class ChatbotController extends Controller
     public function listar_topicos_ajax() {
 
 
-        $topicos_principais = PalavraChave::where('PALAVRA_CHAVE_PRINCIPAL', '1')->orderBy('DATA_CRIACAO', 'desc')->get();
+        $topicos_principais = PalavraChave::where('PALAVRA_CHAVE_PRINCIPAL', '1')->orderBy('DATA_CRIACAO', 'desc')->where('ATIVO', '=', '1')->get();
+        $aaData = [];
 
         foreach ($topicos_principais as $key => $topico) {
-            $botao_editar = '<a href="' . url('chatbot/editar_palavra_chave_pergunta', array($topico->ID)) .  '" class="btn btn-default"><i class="fas fa-pencil-alt"></i> Editar cadastro</a>';                                                                       
+            $botao_editar = ' <a href="' . url('chatbot/editar_palavra_chave_pergunta', array($topico->ID)) .  '" class="btn btn-default"><i class="fas fa-pencil-alt"></i> Editar cadastro</a>';                                                                       
+            $botao_excluir = ' <a href="' . url('chatbot/excluir_palavra_chave_pergunta', array($topico->ID)) .  '" class="btn btn-danger"><i class="fas fa-times"></i> Excluir cadastro</a>';                                                                       
             $aaData[] = [
                 $topico->ID,
                 $topico->NOME,
                 date('d/m/Y', strtotime($topico->DATA_CRIACAO)),
-                $botao_editar
+                $botao_editar . $botao_excluir
             ];
         }
         
@@ -68,10 +74,36 @@ class ChatbotController extends Controller
     }
 
     public function editar_palavra_chave_pergunta(Request $request) {
+        
+        $topico = $this->carregar_topico($request->id);
 
 
         return view('chatbot.editar_palavra_chave_pergunta')
-            ->with('cadastro', []);
+            ->with('topico', $topico);
+    }
+
+    public function excluir_palavra_chave_pergunta(Request $request) {
+        PalavraChave::where('ID', $request->id)
+                  ->update(['ATIVO' => '0']);
+        
+        UtilizadorController::alerta('Tópico excluído com sucesso', 'success');
+
+        return view('chatbot.listar_topicos');
+    }
+
+    public function carregar_topico($id) {
+        $topico = DB::table('palavra_chave')
+            ->leftJoin('pergunta_has_resposta', 'pergunta_has_resposta.ID_PALAVRA_CHAVE', '=', 'palavra_chave.ID')
+            ->leftJoin('pergunta', 'pergunta_has_resposta.ID_PERGUNTA', '=', 'pergunta.ID')
+            ->leftJoin('resposta', 'pergunta_has_resposta.ID_RESPOSTA', '=', 'resposta.ID')
+            ->select('palavra_chave.*', 'pergunta_has_resposta.*', 'resposta.DESCRICAO as DESCRICAO_RESPOSTA', 'pergunta.DESCRICAO as DESCRICAO_PERGUNTA')
+            ->where('palavra_chave.PALAVRA_CHAVE_PRINCIPAL', '=', '1')
+            ->where('palavra_chave.ID', '=', $id)
+            ->where('palavra_chave.ativo', '=', '1')
+            ->get();
+            // ->first();
+
+        return $topico;
     }
 
     public function p_adicionar_palavra_chave_pergunta(Request $request) {
@@ -84,6 +116,10 @@ class ChatbotController extends Controller
             $palavra_chave_principal->DATA_CRIACAO = date('Y-m-d');
             $palavra_chave_principal->DATA_ATUALIZACAO = date('Y-m-d');
             $palavra_chave_principal->save();
+
+            $id_palavra_chave_principal = $palavra_chave_principal->id;
+        } else {
+            $id_palavra_chave_principal = PalavraChave::where('NOME', $request->palavra_chave_principal)->get()->first()->ID;
         }
 
         $respostas = $request->respostas;
@@ -110,10 +146,12 @@ class ChatbotController extends Controller
             $pergunta_has_resposta->DATA_CRIACAO = date('Y-m-d');
             $pergunta_has_resposta->DATA_ATUALIZACAO = date('Y-m-d');
             $pergunta_has_resposta->PONT_RESPOSTA = '0';
+            $pergunta_has_resposta->ID_PALAVRA_CHAVE = $id_palavra_chave_principal;
+            $pergunta_has_resposta->save();
 
             //Quebrando a resposta e perguntas em várias palavras chaves.
-            $palavras_chaves_resposta[] = $this->transformar_string_palavras_chave($resposta['resposta'])[0];
-            foreach ($palavras_chaves_resposta as $key => $palavra_chave_resposta) {
+            $palavras_chaves_resposta = $this->transformar_string_palavras_chave($resposta['resposta']);
+            foreach ($palavras_chaves_resposta as $key_resposta => $palavra_chave_resposta) {
                 if(PalavraChave::verificar_ja_existe_palavra_chave($palavra_chave_resposta)) {
                     $id_palavra_chave = PalavraChave::where('NOME', $palavra_chave_resposta)->get()->first()->ID;
                 } else {
@@ -132,10 +170,33 @@ class ChatbotController extends Controller
                 $palavra_chave_has_resposta->PONT_RESPOSTA = '0'; 
                 $palavra_chave_has_resposta->save();
             }
+
+            //Quebrando a resposta e perguntas em várias palavras chaves.
+            $palavras_chaves_pergunta = $this->transformar_string_palavras_chave($perguntas[$key]['pergunta']);
+            foreach ($palavras_chaves_pergunta as $key_pergunta => $palavra_chave_pergunta) {
+                if(PalavraChave::verificar_ja_existe_palavra_chave($palavra_chave_pergunta)) {
+                    $id_palavra_chave = PalavraChave::where('NOME', $palavra_chave_pergunta)->get()->first()->ID;
+                } else {
+                    $palavra_chave_principal = new PalavraChave();
+                    $palavra_chave_principal->NOME = $palavra_chave_pergunta;
+                    $palavra_chave_principal->ATIVO = '1';
+                    $palavra_chave_principal->DATA_CRIACAO = date('Y-m-d');
+                    $palavra_chave_principal->DATA_ATUALIZACAO = date('Y-m-d');
+                    $palavra_chave_principal->save();
+                    $id_palavra_chave = $palavra_chave_principal->id;
+                }    
+
+                $palavra_chave_has_pergunta = new PalavraChaveHasPergunta();
+                $palavra_chave_has_pergunta->ID_PERGUNTA = $pergunta_cadastro->id; 
+                $palavra_chave_has_pergunta->ID_PALAVRA_CHAVE = $id_palavra_chave; 
+                $palavra_chave_has_pergunta->save();
+            }
             
         }
+        
+        UtilizadorController::alerta('Tópico cadastrado com sucesso', 'success');
 
-        return view('chatbot.listar_perguntas_respostas');
+        return view('chatbot.listar_topicos');
 
     }
 
@@ -153,5 +214,9 @@ class ChatbotController extends Controller
         $string = str_replace('!', '', $string);
 
         return $string;
+    }
+
+    public function debug($variavel) {
+        echo '<pre>' . print_r($variavel, true) . '</pre>';
     }
 }

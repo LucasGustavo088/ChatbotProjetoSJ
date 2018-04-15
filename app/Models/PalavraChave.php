@@ -20,4 +20,12 @@ class PalavraChave extends Model
 
     }
 
+    public static function carregar_topico($id) {
+        // $topico = PalavraChave->hasMany('App\Models\PerguntaHasResposta');
+
+        // ->where('PALAVRA_CHAVE_PRINCIPAL', '1')->where('ID', $request->id)->get()->first();
+
+        // return $topico;
+    }
+
 }
