@@ -42,8 +42,8 @@
             <li>
                 <a href="#home_menu" data-toggle="collapse" aria-expanded="false"><span class="glyphicon glyphicon-home"></span> Home</a>
                 <ul class="collapse list-unstyled" id="home_menu">
+                    <li><a href="{{ route('home') }}"><i class="fas fa-list"></i> Pendências de atendimento</a></li>
                     <li class="nav-item"><a href="#"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> Relatório de periodicidade diária</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> Administrativo</a></li>
                 </ul>
             </li>
             <li>

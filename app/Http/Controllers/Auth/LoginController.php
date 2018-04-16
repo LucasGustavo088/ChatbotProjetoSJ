@@ -36,4 +36,21 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    public function authenticate(Request $request, stdClass $erro) {
+        $input = $request->all();
+
+        $autenticaUsuario = Auth::attempt(
+            [
+                'email' => $request->email,
+                'password' => $request->password
+            ]);
+        if (!$autenticaUsuario) {
+            $erro->tipo = 'warning';
+            $erro->mensagem = 'Verifique se os dados digitados estão corretos';
+            return back()->with('erro', $erro);
+        }
+
+        return redirect()->route('home');
+    }
 }

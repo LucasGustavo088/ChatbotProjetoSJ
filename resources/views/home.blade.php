@@ -129,6 +129,9 @@
 
   $(document).ready(function() {
       inicializar_chatbot();
+
+      $('#nome').val('Teste');
+      $('#email').val('teste@teste.com');
       
       document.querySelector('#mensagem_input').addEventListener('keypress', function (e) {
           var key = e.which || e.keyCode;
@@ -204,11 +207,33 @@
       dados_usuario.nome = $('#nome').val();
       dados_usuario.email = $('#email').val();
 
+      salvar_atendimento();
+
       $('#base_mensagens #identificacao').remove();
       $('#mensagem_input').prop('disabled', false);
 
       adicionar_mensagem_bot("Olá " + dados_usuario.nome + ". Em que posso te ajudar?", true);
     }
+  }
+
+  function salvar_atendimento() {
+    $.ajax({
+        url: '/chatbot_dialog/salvar_atendimento',
+        dataType: 'json',
+        method: 'post',
+        async: false,
+        data: {
+            '_token': "{{ csrf_token() }}",
+            'nome': dados_usuario.nome,
+            'email': dados_usuario.email,
+        },
+        success: function(atendimento) {
+            
+        },
+        error: function() {
+          alert('Ops, houve um erro interno. Verifique minha conexão.');
+        }
+    });
   }
 
   function inicializar_chatbot() {
@@ -258,7 +283,6 @@
   }
 
   function adicionar_mensagem_bot(mensagem, nao_perguntar_satisfacao) {
-    console.log(nao_perguntar_satisfacao)
     if(typeof mensagem != 'undefined') {
       mensagem_chatbot = mensagem;
     } else {

@@ -22,20 +22,6 @@ CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET latin1 ;
 USE `mydb` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`atendente`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`atendente` (
-  `ID` INT(11) NOT NULL AUTO_INCREMENT,
-  `NOME` VARCHAR(45) NOT NULL,
-  `ATIVO` TINYINT(4) NULL DEFAULT NULL,
-  `DATA_CRIACAO` DATETIME NULL DEFAULT NULL,
-  `DATA_ATUALIZACAO` DATETIME NULL DEFAULT NULL,
-  PRIMARY KEY (`ID`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
-
-
--- -----------------------------------------------------
 -- Table `mydb`.`cliente`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`cliente` (
@@ -69,32 +55,24 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`atendimento` (
   `ID` INT(11) NOT NULL AUTO_INCREMENT,
-  `DESCRICAO` VARCHAR(45) NOT NULL,
   `ATIVO` TINYINT(4) NULL DEFAULT NULL,
   `DATA_ATUALIZACAO` DATETIME NULL DEFAULT NULL,
   `DATA_CRIACAO` DATETIME NULL DEFAULT NULL,
-  `ID_ATENDENTE` INT(11) NOT NULL,
-  `ID_CLIENTE` INT(11) NOT NULL,
-  `ID_PERGUNTA` INT(11) NOT NULL,
+  `ID_ATENDENTE` INT(11) NULL,
+  `ID_CLIENTE` INT(11) NULL,
   `DURACAO_ATENDIMENTO` INT(11) NULL DEFAULT NULL,
   `QTD_TENTATIVA` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`),
   INDEX `fk_ATENDIMENTO_ATENDENTE_idx` (`ID_ATENDENTE` ASC),
   INDEX `fk_ATENDIMENTO_CLIENTE1_idx` (`ID_CLIENTE` ASC),
-  INDEX `fk_ATENDIMENTO_PERGUNTA1_idx` (`ID_PERGUNTA` ASC),
   CONSTRAINT `fk_ATENDIMENTO_ATENDENTE`
     FOREIGN KEY (`ID_ATENDENTE`)
-    REFERENCES `mydb`.`atendente` (`ID`)
+    REFERENCES `mydb`.`users` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_ATENDIMENTO_CLIENTE1`
     FOREIGN KEY (`ID_CLIENTE`)
     REFERENCES `mydb`.`cliente` (`ID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_ATENDIMENTO_PERGUNTA1`
-    FOREIGN KEY (`ID_PERGUNTA`)
-    REFERENCES `mydb`.`pergunta` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -121,23 +99,16 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`atendimento_has_resposta` (
   `ID` INT(11) NOT NULL AUTO_INCREMENT,
-  `ID_ATENDIMENTO` INT(11) NOT NULL,
-  `ID_RESPOSTA` INT(11) NOT NULL,
+  `ID_RESPOSTA` INT(11) NULL,
+  ID_ATENDIMENTO INT(11) NULL,
+  DATA_CRIACAO DATETIME NULL,
+  DATA_ATUALIZACAO DATETIME NULL,
+  INDEX `fk_table1_resposta1_idx` (`ID_RESPOSTA` ASC),
+  INDEX `fk_table1_atendimento1_idx` (`ID_RESPOSTA` ASC),
   PRIMARY KEY (`ID`),
-  INDEX `fk_ATENDIMENTO_has_RESPOSTA_RESPOSTA1_idx` (`ID_RESPOSTA` ASC),
-  INDEX `fk_ATENDIMENTO_has_RESPOSTA_ATENDIMENTO1_idx` (`ID_ATENDIMENTO` ASC),
-  CONSTRAINT `fk_ATENDIMENTO_has_RESPOSTA_ATENDIMENTO1`
-    FOREIGN KEY (`ID_ATENDIMENTO`)
-    REFERENCES `mydb`.`atendimento` (`ID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_ATENDIMENTO_has_RESPOSTA_RESPOSTA1`
-    FOREIGN KEY (`ID_RESPOSTA`)
-    REFERENCES `mydb`.`resposta` (`ID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+  CONSTRAINT `fk_table1_resposta1` FOREIGN KEY(ID_ATENDIMENTO) REFERENCES atendimento(ID),
+  CONSTRAINT `fk_table1_resposta2` FOREIGN KEY(ID_RESPOSTA) REFERENCES resposta(ID))
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -219,25 +190,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`pergunta_has_palavra_chave` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
-
--- -----------------------------------------------------
--- Table `mydb`.`users`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`users` (
-  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(255) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NOT NULL,
-  `email` VARCHAR(255) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NOT NULL,
-  `password` VARCHAR(255) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NOT NULL,
-  `remember_token` VARCHAR(100) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NULL DEFAULT NULL,
-  `created_at` TIMESTAMP NULL DEFAULT NULL,
-  `updated_at` TIMESTAMP NULL DEFAULT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 3
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_unicode_ci;
-
-
 -- -----------------------------------------------------
 -- Table `mydb`.`pergunta`
 -- -----------------------------------------------------
@@ -255,15 +207,16 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 -- Table `mydb`.`atendente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`atendente` (
-  `ID` INT(11) NOT NULL AUTO_INCREMENT,
-  `NOME` VARCHAR(45) NOT NULL,
-  `ATIVO` TINYINT(4) NULL DEFAULT NULL,
-  `DATA_CRIACAO` DATETIME NULL DEFAULT NULL,
-  `DATA_ATUALIZACAO` DATETIME NULL DEFAULT NULL,
-  PRIMARY KEY (`ID`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+CREATE TABLE `atendente` (
+   `id` int(10) NOT NULL AUTO_INCREMENT,
+   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+   `created_at` timestamp NULL DEFAULT NULL,
+   `updated_at` timestamp NULL DEFAULT NULL,
+   PRIMARY KEY (`id`)
+ ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 -- -----------------------------------------------------
@@ -286,14 +239,13 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`atendimento` (
   `ID` INT(11) NOT NULL AUTO_INCREMENT,
-  `DESCRICAO` VARCHAR(45) NOT NULL,
+  `DESCRICAO` VARCHAR(45) NULL,
   `ATIVO` TINYINT(4) NULL DEFAULT NULL,
   `DATA_ATUALIZACAO` DATETIME NULL DEFAULT NULL,
   `DATA_CRIACAO` DATETIME NULL DEFAULT NULL,
-  `ID_ATENDENTE` INT(11) NOT NULL,
-  `ID_CLIENTE` INT(11) NOT NULL,
-  `ID_PERGUNTA` INT(11) NOT NULL,
-  `DURACAO_ATENDIMENTO` INT(11) NULL DEFAULT NULL,
+  `ID_ATENDENTE` INT(11) NULL,
+  `ID_CLIENTE` INT(11) NULL,
+  `DATA_FINALIZACAO` INT(11) NULL DEFAULT NULL,
   `QTD_TENTATIVA` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`),
   INDEX `fk_ATENDIMENTO_ATENDENTE_idx` (`ID_ATENDENTE` ASC),
@@ -323,21 +275,13 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`atendimento_has_pergunta` (
   `ID` INT(11) NOT NULL AUTO_INCREMENT,
-  `ID_PERGUNTA` INT(11) NOT NULL,
-  `ID_RESPOSTA` INT(11) NOT NULL,
-  INDEX `fk_table1_pergunta1_idx` (`ID_PERGUNTA` ASC),
-  INDEX `fk_table1_atendimento1_idx` (`ID_RESPOSTA` ASC),
+  ID_PERGUNTA INT(11) NULL,
+  ID_ATENDIMENTO INT(11) NULL,
+  DATA_CRIACAO DATETIME NULL,
+  DATA_ATUALIZACAO DATETIME NULL,
   PRIMARY KEY (`ID`),
-  CONSTRAINT `fk_table1_pergunta1`
-    FOREIGN KEY (`ID_PERGUNTA`)
-    REFERENCES `mydb`.`pergunta` (`ID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_table1_atendimento1`
-    FOREIGN KEY (`ID_RESPOSTA`)
-    REFERENCES `mydb`.`atendimento` (`ID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  CONSTRAINT `fk_table1_pergunta1` FOREIGN KEY(ID_ATENDIMENTO) REFERENCES atendimento(ID),
+  CONSTRAINT `fk_table1_pergunta2` FOREIGN KEY(ID_PERGUNTA) REFERENCES pergunta(ID))
 ENGINE = InnoDB;
 
 CREATE TABLE pergunta_has_resposta (
@@ -361,4 +305,4 @@ SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
-insert into `users` (`email`, `name`, `password`, `updated_at`, `created_at`) values ('funcionario@email.com', 'Funcionario', '$2y$10$cf22WIcjgw99j1E1DS16wOgma1ofXdAqPc/XjN/7uyKl8zZx0E84.', '2018-03-24 16:04:24', '2018-03-24 16:04:24');
+insert into `atendente` (`email`, `name`, `password`, `updated_at`, `created_at`) values ('funcionario@email.com', 'Funcionario', '$2y$10$cf22WIcjgw99j1E1DS16wOgma1ofXdAqPc/XjN/7uyKl8zZx0E84.', '2018-03-24 16:04:24', '2018-03-24 16:04:24');

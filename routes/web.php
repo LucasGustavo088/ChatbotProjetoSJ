@@ -20,6 +20,7 @@ Route::get('/atendimento_usuario', 'HomeController@atendimento_usuario')->name('
 
 Route::get('/dashboard', 'DashboardController@home')->name('home');
 Route::get('/dashboard/atendimento/{id}', 'DashboardController@atendimento');
+Route::get('/dashboard/listar_pendencias_ajax', 'DashboardController@listar_pendencias_ajax');
 
 //Utilizador 
 Route::get('/utilizador/remover_alerta/{id}', 'UtilizadorController@remover_alerta');
@@ -38,4 +39,5 @@ Route::group(['prefix' => 'chatbot'], function() {
 });
 
 Route::post('chatbot_dialog/obter_resposta_ajax', 'ChatbotDialogController@obter_resposta_ajax')->name('chatbotdialog.obter_resposta_ajax');
+Route::post('chatbot_dialog/salvar_atendimento', 'ChatbotDialogController@salvar_atendimento')->name('chatbotdialog.salvar_atendimento');
 
