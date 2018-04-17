@@ -19,7 +19,7 @@ class DashboardController extends Controller
 
     public function atendimento(Request $request) {
 
-        return view('dashboard.atendimento')->with('id_cliente', $request->id);
+        return view('dashboard.atendimento')->with('id_atendimento', $request->id);
     }
 
     public function listar_pendencias_ajax() {
@@ -33,15 +33,13 @@ class DashboardController extends Controller
         $aaData = [];
 
         foreach ($atendimentos_principais as $key => $atendimento) {
-            $botao_atender = ' <a href="' . url('chatbot/editar_palavra_chave_pergunta', array($atendimento->ID)) .  '" class="btn btn-default"><i class="fas fa-pencil-alt"></i> Editar</a>';                                                                       
-            $botao_excluir = ' <a href="' . url('chatbot/excluir_palavra_chave_pergunta', array($atendimento->ID)) .  '" class="btn btn-danger"><i class="fas fa-times"></i> Excluir</a>'; 
-
+            $botao_atender = ' <a onclick="redirecionar_para_atendimento(' . $atendimento->ID .')" class="btn btn-danger"> Atender</a>';                                                                       
             $aaData[] = [
                 $atendimento->ID,
                 $atendimento->NOME_CLIENTE,
                 $atendimento->EMAIL_CLIENTE,
                 date('d/m/Y', strtotime($atendimento->DATA_CRIACAO)),
-                $botao_atender . $botao_excluir
+                $botao_atender
             ];
         }
         

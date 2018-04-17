@@ -121,6 +121,8 @@
 
   var ultimas_mensagens_usuario = [];
   var quantidade_resposta = 0;
+  var id_atendimento = '';
+  var travar_atualizacao = false;
   var dados_usuario = {
     nome: '',
     email: '' 
@@ -180,7 +182,45 @@
     $( "#chatbot1" ).remove();
   });
 
-  
+  function atualizar_chat() {
+    if(travar_atualizacao) {
+      return false;
+    }
+
+    $('#base_mensagens').html('');
+
+    var clone_usuario_mensagem = $('#clone_usuario_mensagem').html();
+    clone_usuario_mensagem = str_replace('dados_usuario.nome', dados_usuario.nome, clone_usuario_mensagem)
+    clone_usuario_mensagem = str_replace('$mensagem', obter_log_ultima_mensagem_usuario().mensagem, clone_usuario_mensagem);
+    $('#base_mensagens').append(clone_usuario_mensagem);
+
+    $.ajax({
+        url: '/chatbot_dialog/carregar_mensagens_chat/' + id_atendimento,
+        dataType: 'json',
+        method: 'get',
+        async: false,
+        data: {
+            '_token': "{{ csrf_token() }}"
+        },
+        success: function(retorno) {
+          if(retorno.atendimento != null) {
+            retorno.atendimento.forEach(function(atendimento) {
+              if(atendimento.descricao_resposta != null && travar_atualizacao == false) {
+                travar_atualizacao = true;
+                var clone_usuario_chatbot = $('#clone_chatbot_mensagem').html();
+                clone_usuario_chatbot = str_replace('$mensagem', atendimento.descricao_resposta, clone_usuario_chatbot);
+                clone_usuario_chatbot = str_replace('$id', contador_clone_chatbot_mensagem, clone_usuario_chatbot);
+
+                $('#base_mensagens').append(clone_usuario_chatbot);
+              }
+              // adicionar_mensagem_usuario_externo(atendimento.descricao_pergunta);
+            });
+          }
+        },
+    });
+
+    scroll_down_mensagem_enviada();
+  }
 
   function enviar_mensagem() {
     if($('#mensagem_input').val() != '') {
@@ -227,8 +267,8 @@
             'nome': dados_usuario.nome,
             'email': dados_usuario.email,
         },
-        success: function(atendimento) {
-            
+        success: function(retorno) {
+            id_atendimento = retorno.atendimento.id;
         },
         error: function() {
           alert('Ops, houve um erro interno. Verifique minha conexão.');
@@ -265,6 +305,29 @@
 
     $('#mensagem_input').val('');
     $('#mensagem_input').focus();
+
+    salvar_mensagem_banco('pergunta');
+  }
+
+  function salvar_mensagem_banco(pergunta_ou_resposta) {
+    if(pergunta_ou_resposta == 'pergunta') {
+      $.ajax({
+          url: '/chatbot_dialog/salvar_mensagem_banco/pergunta/' + id_atendimento,
+          dataType: 'json',
+          method: 'get',
+          async: false,
+          data: {
+              '_token': "{{ csrf_token() }}",
+              dados_mensagem: obter_log_ultima_mensagem_usuario()
+          },
+          success: function(retorno) {
+              mensagem_chatbot = retorno.DESCRICAO;
+          },
+          error: function() {
+            mensagem_chatbot = 'Ops, houve um erro interno.';
+          }
+      });
+    }
   }
 
   function adicionar_log_ultima_mensagem_usuario() {
@@ -283,6 +346,12 @@
   }
 
   function adicionar_mensagem_bot(mensagem, nao_perguntar_satisfacao) {
+    if(contador_resposta == 3) {
+      alert('Por favor, aguarde. Estamos iniciando o atendimento');
+      setInterval(atualizar_chat, 3000);
+      return false;
+    }
+
     if(typeof mensagem != 'undefined') {
       mensagem_chatbot = mensagem;
     } else {
@@ -294,7 +363,7 @@
     clone_usuario_chatbot = str_replace('$id', contador_clone_chatbot_mensagem, clone_usuario_chatbot);
 
     $('#base_mensagens').append(clone_usuario_chatbot);
-
+    contador_resposta++;
     if(nao_perguntar_satisfacao) {
       $('#clone_chatbot_mensagem' + contador_clone_chatbot_mensagem + ' .satisfacao').remove();
     }
