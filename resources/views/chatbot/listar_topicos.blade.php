@@ -2,7 +2,7 @@
 
 @section('dashboard_content')
 <div class="navbar">
-    <a class="btn btn-success" href="{{ route('chatbot.adicionar_palavra_chave_pergunta') }}">Adicionar palavra-chave principal</a>
+    <a class="btn btn-success" href="{{ route('chatbot.adicionar_palavra_chave_pergunta') }}">Adicionar tópico principal</a>
 </div>
 <div style="clear: both;"></div>
 <table class="table datatable table-striped" id="popular_tabela_atendimento">
