@@ -9,7 +9,7 @@
 
 	<div class="chat-forma">
 		<textarea id="mensagem_input"></textarea>
-		<button onclick="enviar_mensagem()">Enviar</button>
+		<button id="botao_enviar_mensagem" onclick="enviar_mensagem()">Enviar</button>
 	</div>
 </div>
 
@@ -63,19 +63,22 @@
 	}
 
 	function adicionar_mensagem_usuario() {
-		travar_atualizacao = true;
 	  //Histórico de mensagens do usuário
 	  adicionar_log_ultima_mensagem_usuario();
 	  
-	  var clone_usuario_mensagem = $('#clone_atendente').html();
-	  clone_usuario_mensagem = str_replace('dados_usuario.nome', dados_usuario.nome, clone_usuario_mensagem)
-	  clone_usuario_mensagem = str_replace('$mensagem', obter_log_ultima_mensagem_usuario().mensagem, clone_usuario_mensagem);
-	  $('#base_mensagens').append(clone_usuario_mensagem);
+	  adicionar_mensagem_usuario_caixa(obter_log_ultima_mensagem_usuario().mensagem);
 
 	  $('#mensagem_input').val('');
 	  $('#mensagem_input').focus();
-
+	  scroll_down_mensagem_enviada();
 	  salvar_mensagem_banco();
+	}
+
+	function adicionar_mensagem_usuario_caixa(mensagem) {
+		var clone_usuario_mensagem = $('#clone_atendente').html();
+		clone_usuario_mensagem = str_replace('dados_usuario.nome', dados_usuario.nome, clone_usuario_mensagem)
+		clone_usuario_mensagem = str_replace('$mensagem', mensagem, clone_usuario_mensagem);
+		$('#base_mensagens').append(clone_usuario_mensagem);
 	}
 
 	function scroll_down_mensagem_enviada() {
@@ -87,7 +90,7 @@
 		if(travar_atualizacao) {
 			return false;
 		}
-		console.log('teste');
+
 		$('#base_mensagens').html('');
 
 		$.ajax({
@@ -100,14 +103,34 @@
 		    },
 		    success: function(retorno) {
 		    	if(retorno.atendimento != null) {
-			    	retorno.atendimento.forEach(function(atendimento) {
-			    		adicionar_mensagem_usuario_externo(atendimento.descricao_pergunta);
+		    		if(retorno.atendimento.STATUS != 'atendimento_iniciado') {
+		    			desabilitar_envio();
+		    		} else {
+		    			habilitar_envio();
+		    		}
+
+			    	retorno.atendimento.chat.forEach(function(chat) {
+			    		if(chat["pergunta"] != undefined) {
+			    			adicionar_mensagem_usuario_externo(chat.pergunta.DESCRICAO);
+			    		} else if (chat["resposta"] != undefined) {
+			    			adicionar_mensagem_usuario_caixa(chat.resposta.DESCRICAO)
+			    		}
 			    	});
 		    	}
 		    },
 		});
+	}
 
-		scroll_down_mensagem_enviada();
+	function desabilitar_envio() {
+		$('#mensagem_input').prop('disabled', true);
+		$('#mensagem_input').attr('placeholder', 'Atendimento ainda não solicitado...');
+		$('#botao_enviar_mensagem').hide();
+	}
+
+	function habilitar_envio() {
+		$('#mensagem_input').prop('disabled', false);
+		$('#mensagem_input').attr('placeholder', '');
+		$('#botao_enviar_mensagem').show();
 	}
 
 	function salvar_mensagem_banco() {
@@ -130,17 +153,17 @@
 	}
 
 	function adicionar_mensagem_usuario_externo(mensagem) {
-	  //Histórico de mensagens do usuário
-	  adicionar_log_ultima_mensagem_usuario_externo(mensagem);
+	  	//Histórico de mensagens do usuário
+	  	adicionar_log_ultima_mensagem_usuario_externo(mensagem);
+		adicionar_mensagem_usuario_externo_caixa();
+	  	$('#mensagem_input').focus();
+	}
 
-	  var clone_usuario_mensagem = $('#clone_usuario_mensagem').html();
-	  clone_usuario_mensagem = str_replace('dados_usuario.nome', dados_usuario.nome, clone_usuario_mensagem)
-	  clone_usuario_mensagem = str_replace('$mensagem', obter_log_ultima_mensagem_usuario_externo().mensagem, clone_usuario_mensagem);
-	  $('#base_mensagens').append(clone_usuario_mensagem);
-
-	  
-	  $('#mensagem_input').focus();
-
+	function adicionar_mensagem_usuario_externo_caixa(mensagem) {
+		var clone_usuario_mensagem = $('#clone_usuario_mensagem').html();
+		clone_usuario_mensagem = str_replace('dados_usuario.nome', dados_usuario.nome, clone_usuario_mensagem)
+		clone_usuario_mensagem = str_replace('$mensagem', obter_log_ultima_mensagem_usuario_externo().mensagem, clone_usuario_mensagem);
+		$('#base_mensagens').append(clone_usuario_mensagem);
 	}
 
 	function adicionar_log_ultima_mensagem_usuario_externo(mensagem_usuario) {

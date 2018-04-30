@@ -10,6 +10,7 @@
             <th>Nome do cliente</th>
             <th>Email</th>
             <th>Perguntas realizadas</th>
+            <th>Status</th>
             <th style="width: 200px;">Ações</th>
         </tr>
     </thead>

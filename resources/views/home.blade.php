@@ -189,11 +189,6 @@
 
     $('#base_mensagens').html('');
 
-    var clone_usuario_mensagem = $('#clone_usuario_mensagem').html();
-    clone_usuario_mensagem = str_replace('dados_usuario.nome', dados_usuario.nome, clone_usuario_mensagem)
-    clone_usuario_mensagem = str_replace('$mensagem', obter_log_ultima_mensagem_usuario().mensagem, clone_usuario_mensagem);
-    $('#base_mensagens').append(clone_usuario_mensagem);
-
     $.ajax({
         url: '/chatbot_dialog/carregar_mensagens_chat/' + id_atendimento,
         dataType: 'json',
@@ -204,22 +199,26 @@
         },
         success: function(retorno) {
           if(retorno.atendimento != null) {
-            retorno.atendimento.forEach(function(atendimento) {
-              if(atendimento.descricao_resposta != null && travar_atualizacao == false) {
-                travar_atualizacao = true;
-                var clone_usuario_chatbot = $('#clone_chatbot_mensagem').html();
-                clone_usuario_chatbot = str_replace('$mensagem', atendimento.descricao_resposta, clone_usuario_chatbot);
-                clone_usuario_chatbot = str_replace('$id', contador_clone_chatbot_mensagem, clone_usuario_chatbot);
-
-                $('#base_mensagens').append(clone_usuario_chatbot);
+            retorno.atendimento.chat.forEach(function(chat) {
+              if(chat["resposta"] != undefined) {
+                adicionar_mensagem_usuario_atendente_caixa(chat.resposta.DESCRICAO);
+              } else if (chat["pergunta"] != undefined) {
+                adicionar_mensagem_usuario_caixa(chat.pergunta.DESCRICAO)
               }
-              // adicionar_mensagem_usuario_externo(atendimento.descricao_pergunta);
             });
           }
         },
     });
 
     scroll_down_mensagem_enviada();
+  }
+
+  function adicionar_mensagem_usuario_atendente_caixa(mensagem) {
+    var clone_usuario_chatbot = $('#clone_chatbot_mensagem').html();
+    clone_usuario_chatbot = str_replace('$mensagem', mensagem, clone_usuario_chatbot);
+    clone_usuario_chatbot = str_replace('$id', contador_clone_chatbot_mensagem, clone_usuario_chatbot);
+
+    $('#base_mensagens').append(clone_usuario_chatbot);
   }
 
   function enviar_mensagem() {
@@ -298,15 +297,18 @@
     //Histórico de mensagens do usuário
     adicionar_log_ultima_mensagem_usuario();
     
+    adicionar_mensagem_usuario_caixa(obter_log_ultima_mensagem_usuario().mensagem);
+    
+    $('#mensagem_input').focus();
+    $('#mensagem_input').val('');
+    salvar_mensagem_banco('pergunta');
+  }
+
+  function adicionar_mensagem_usuario_caixa(mensagem) {
     var clone_usuario_mensagem = $('#clone_usuario_mensagem').html();
     clone_usuario_mensagem = str_replace('dados_usuario.nome', dados_usuario.nome, clone_usuario_mensagem)
-    clone_usuario_mensagem = str_replace('$mensagem', obter_log_ultima_mensagem_usuario().mensagem, clone_usuario_mensagem);
+    clone_usuario_mensagem = str_replace('$mensagem', mensagem, clone_usuario_mensagem);
     $('#base_mensagens').append(clone_usuario_mensagem);
-
-    $('#mensagem_input').val('');
-    $('#mensagem_input').focus();
-
-    salvar_mensagem_banco('pergunta');
   }
 
   function salvar_mensagem_banco(pergunta_ou_resposta) {
@@ -347,8 +349,10 @@
 
   function adicionar_mensagem_bot(mensagem, nao_perguntar_satisfacao) {
     if(contador_resposta == 3) {
+      contador_resposta++;
       alert('Por favor, aguarde. Estamos iniciando o atendimento');
       setInterval(atualizar_chat, 3000);
+      atualizar_status_atendimento('atendimento_iniciado');
       return false;
     }
 
@@ -368,6 +372,23 @@
       $('#clone_chatbot_mensagem' + contador_clone_chatbot_mensagem + ' .satisfacao').remove();
     }
     contador_clone_chatbot_mensagem++;
+  }
+
+  function atualizar_status_atendimento(status) {
+    $.ajax({
+        url: '/chatbot_dialog/atualizar_status_atendimento',
+        dataType: 'json',
+        method: 'post',
+        async: false,
+        data: {
+            '_token': "{{ csrf_token() }}",
+            'status': status,
+            'id_atendimento': id_atendimento
+        },
+        error: function() {
+          alert('Ops, houve um erro interno.')
+        }
+    });
   }
 
   function str_replace(find,replaceTo, str){

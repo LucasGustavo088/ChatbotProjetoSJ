@@ -10,6 +10,7 @@ use App\Models\Pergunta as Pergunta;
 use App\Models\PalavraChaveHasResposta as PalavraChaveHasResposta;
 use App\Models\PalavraChaveHasPergunta as PalavraChaveHasPergunta;
 use Illuminate\Support\Facades\DB;
+
 use App\Http\Controllers;
 
 class ChatbotController extends Controller
@@ -113,8 +114,8 @@ class ChatbotController extends Controller
             $palavra_chave_principal->NOME = $request->palavra_chave_principal;
             $palavra_chave_principal->PALAVRA_CHAVE_PRINCIPAL = '1';
             $palavra_chave_principal->ATIVO = '1';
-            $palavra_chave_principal->DATA_CRIACAO = date('Y-m-d');
-            $palavra_chave_principal->DATA_ATUALIZACAO = date('Y-m-d');
+            $palavra_chave_principal->DATA_CRIACAO = data_atual();
+            $palavra_chave_principal->DATA_ATUALIZACAO = data_atual();
             $palavra_chave_principal->save();
 
             $id_palavra_chave_principal = $palavra_chave_principal->id;
@@ -128,23 +129,23 @@ class ChatbotController extends Controller
         foreach($respostas as $key => $resposta) {
             $resposta_cadastro = new Resposta();
             $resposta_cadastro->DESCRICAO = $resposta['resposta'];
-            $resposta_cadastro->DATA_CRIACAO = date('Y-m-d');
-            $resposta_cadastro->DATA_ATUALIZACAO = date('Y-m-d');
+            $resposta_cadastro->DATA_CRIACAO = data_atual();
+            $resposta_cadastro->DATA_ATUALIZACAO = data_atual();
             $resposta_cadastro->ATIVO = '1';
             $resposta_cadastro->save();
 
             $pergunta_cadastro = new Pergunta();
             $pergunta_cadastro->DESCRICAO = $perguntas[$key]['pergunta'];
-            $pergunta_cadastro->DATA_CRIACAO = date('Y-m-d');
-            $pergunta_cadastro->DATA_ATUALIZACAO = date('Y-m-d');
+            $pergunta_cadastro->DATA_CRIACAO = data_atual();
+            $pergunta_cadastro->DATA_ATUALIZACAO = data_atual();
             $pergunta_cadastro->ATIVO = '1';
             $pergunta_cadastro->save();
 
             $pergunta_has_resposta = new PerguntaHasResposta();
             $pergunta_has_resposta->ID_PERGUNTA = $pergunta_cadastro->id;
             $pergunta_has_resposta->ID_RESPOSTA = $resposta_cadastro->id;
-            $pergunta_has_resposta->DATA_CRIACAO = date('Y-m-d');
-            $pergunta_has_resposta->DATA_ATUALIZACAO = date('Y-m-d');
+            $pergunta_has_resposta->DATA_CRIACAO = data_atual();
+            $pergunta_has_resposta->DATA_ATUALIZACAO = data_atual();
             $pergunta_has_resposta->PONT_RESPOSTA = '0';
             $pergunta_has_resposta->ID_PALAVRA_CHAVE = $id_palavra_chave_principal;
             $pergunta_has_resposta->save();
@@ -158,8 +159,8 @@ class ChatbotController extends Controller
                     $palavra_chave_principal = new PalavraChave();
                     $palavra_chave_principal->NOME = $palavra_chave_resposta;
                     $palavra_chave_principal->ATIVO = '1';
-                    $palavra_chave_principal->DATA_CRIACAO = date('Y-m-d');
-                    $palavra_chave_principal->DATA_ATUALIZACAO = date('Y-m-d');
+                    $palavra_chave_principal->DATA_CRIACAO = data_atual();
+                    $palavra_chave_principal->DATA_ATUALIZACAO = data_atual();
                     $palavra_chave_principal->save();
                     $id_palavra_chave = $palavra_chave_principal->id;
                 }    
@@ -180,8 +181,8 @@ class ChatbotController extends Controller
                     $palavra_chave_principal = new PalavraChave();
                     $palavra_chave_principal->NOME = $palavra_chave_pergunta;
                     $palavra_chave_principal->ATIVO = '1';
-                    $palavra_chave_principal->DATA_CRIACAO = date('Y-m-d');
-                    $palavra_chave_principal->DATA_ATUALIZACAO = date('Y-m-d');
+                    $palavra_chave_principal->DATA_CRIACAO = data_atual();
+                    $palavra_chave_principal->DATA_ATUALIZACAO = data_atual();
                     $palavra_chave_principal->save();
                     $id_palavra_chave = $palavra_chave_principal->id;
                 }    

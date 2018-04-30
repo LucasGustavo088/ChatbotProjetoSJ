@@ -22,8 +22,4 @@ class UtilizadorController extends Controller
             'tipo' => $tipo
         ];
     }
-
-    public static function debug($variavel) {
-        echo '<pre>' . print_r($variavel, true) . '</pre>';
-    }
 }

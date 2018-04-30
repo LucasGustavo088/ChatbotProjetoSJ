@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
-{
+{   
+    protected $em;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -33,12 +35,22 @@ class DashboardController extends Controller
         $aaData = [];
 
         foreach ($atendimentos_principais as $key => $atendimento) {
-            $botao_atender = ' <a onclick="redirecionar_para_atendimento(' . $atendimento->ID .')" class="btn btn-danger"> Atender</a>';                                                                       
+            $botao_atender = ' <a onclick="redirecionar_para_atendimento(' . $atendimento->ID .')" class="btn btn-success"> Atender</a>'; 
+
+            $status = 'Chatbot';
+
+            if($atendimento->STATUS == 'atendimento_iniciado') {
+                $status = 'Atendimento iniciado';
+            } else {
+                $botao_atender = ' <a onclick="redirecionar_para_atendimento(' . $atendimento->ID .')" class="btn btn-primary"> Visualizar</a>';
+            }
+
             $aaData[] = [
                 $atendimento->ID,
                 $atendimento->NOME_CLIENTE,
                 $atendimento->EMAIL_CLIENTE,
                 date('d/m/Y', strtotime($atendimento->DATA_CRIACAO)),
+                $status,
                 $botao_atender
             ];
         }
@@ -54,9 +66,8 @@ class DashboardController extends Controller
 
     }
 
-    public function debug($variavel) {
-        echo '<pre>' . print_r($variavel, true) . '</pre>';
+    public function query_com_doctrine() {
+
     }
 
-    
 }

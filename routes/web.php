@@ -42,4 +42,5 @@ Route::post('chatbot_dialog/obter_resposta_ajax', 'ChatbotDialogController@obter
 Route::post('chatbot_dialog/salvar_atendimento', 'ChatbotDialogController@salvar_atendimento')->name('chatbotdialog.salvar_atendimento');
 Route::get('/chatbot_dialog/carregar_mensagens_chat/{id_atendimento}', 'ChatbotDialogController@carregar_mensagens_chat');
 Route::get('/chatbot_dialog/salvar_mensagem_banco/{pergunta_ou_resposta}/{id_atendimento}', 'ChatbotDialogController@salvar_mensagem_banco');
+Route::post('/chatbot_dialog/atualizar_status_atendimento', 'ChatbotDialogController@atualizar_status_atendimento');
 
