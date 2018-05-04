@@ -58,7 +58,7 @@
                 
             </li>
             <li>
-                <a href="#"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Relatórios personalizados</a>
+                <a href="{{ route('relatorio.listar_pendencias') }}"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Relatórios personalizados</a>
             </li>
             <li>
                 <a href="#"> <span class="glyphicon glyphicon-signal" aria-hidden="true"></span> Análise</a>
