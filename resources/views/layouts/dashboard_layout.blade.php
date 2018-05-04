@@ -14,6 +14,7 @@
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet"> 
     <link rel="icon" type="image/png" href="cartorio-sp.ico"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatable.min.css') }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     
     <!-- Scripts -->

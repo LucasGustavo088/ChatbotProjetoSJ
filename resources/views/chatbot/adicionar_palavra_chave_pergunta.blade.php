@@ -12,7 +12,7 @@
         <div class="panel-body">
             <div class="form-group row">
                 <label for="palavra_chave_principal" class="col-sm-2 control-label">Tópico principal</label>
-            <div class="col-sm-10">
+                <div class="col-sm-10">
                     <input type="text" required name="palavra_chave_principal" placeholder="Digite o tópico principal das perguntas e respostas. Ex: Certidão de nascimento" class="form-control" id="palavra_chave_principal" rows="5">
                 </div>
             </div>
