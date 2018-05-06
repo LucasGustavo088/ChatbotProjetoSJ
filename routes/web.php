@@ -43,6 +43,7 @@ Route::post('chatbot_dialog/salvar_atendimento', 'ChatbotDialogController@salvar
 Route::get('/chatbot_dialog/carregar_mensagens_chat/{id_atendimento}', 'ChatbotDialogController@carregar_mensagens_chat');
 Route::get('/chatbot_dialog/salvar_mensagem_banco/{pergunta_ou_resposta}/{id_atendimento}', 'ChatbotDialogController@salvar_mensagem_banco');
 Route::post('/chatbot_dialog/atualizar_status_atendimento', 'ChatbotDialogController@atualizar_status_atendimento');
+Route::post('/chatbot_dialog/resposta_satisfatoria', 'ChatbotDialogController@resposta_satisfatoria');
 
 Route::get('/relatorio/listar_pendencias', 'RelatorioController@listar_pendencias')->name('relatorio.listar_pendencias');
 

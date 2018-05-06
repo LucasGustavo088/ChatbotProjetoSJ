@@ -11,6 +11,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- bootstrap 3 -->
+    <link rel="shortcut icon" href="{{{ asset('images/logo-icon.png') }}}">
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet"> 
     <link href="{{ asset('css/home.css') }}" rel="stylesheet"> 
     <!-- Scripts -->

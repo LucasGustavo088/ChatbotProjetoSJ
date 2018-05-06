@@ -90,7 +90,7 @@
         <div class="col-xs-10 col-md-10">
             <div class="messages msg_receive">
                 <p>$mensagem</p>
-                <time datetime="2009-11-13T20:00">Chatbot • Agora mesmo <button onclick="finalizar_chatbot()" style="width: 57px; height: 20px; font-size: 8px;" class="btn btn-success satisfacao" type="button">Satisfeito?</button></time>
+                <time datetime="2009-11-13T20:00">Chatbot • Agora mesmo <button onclick="finalizar_chatbot(); resposta_satisfatoria($id_pergunta_resposta)" style="width: 57px; height: 20px; font-size: 8px;" class="btn btn-success satisfacao" type="button">Satisfeito?</button></time>
             </div>
         </div>
     </div>
@@ -236,7 +236,7 @@
 
   function finalizar_chatbot() {
     $('#base_mensagens').html('');
-    $('#base_mensagens').append('<br><br><h4 style="text-align: center"><strong>Obrigado!</strong></h4><br><br><br><button type="button" class="btn btn-success" style="margin-left: 60px;" onclick="inicializar_chatbot();">Perguntar novamente</button>');
+    $('#base_mensagens').append('<br><br><h4 style="text-align: center"><strong>Obrigado!</strong></h4><br><br><br><button type="button" class="btn btn-success" style="margin-left: 60px;" onclick="location.reload();">Perguntar novamente</button>');
   }
 
   function salvar_informacoes_usuario() {
@@ -356,14 +356,17 @@
       return false;
     }
 
+    var mensagem_chatbot = {};
     if(typeof mensagem != 'undefined') {
-      mensagem_chatbot = mensagem;
+      mensagem_chatbot.resposta = mensagem;
+      mensagem_chatbot.id_pergunta_resposta = -1;
     } else {
-      var mensagem_chatbot = obter_resposta_ajax($('#mensagem_input').val());
+      mensagem_chatbot = obter_resposta_ajax($('#mensagem_input').val());
     }
 
     var clone_usuario_chatbot = $('#clone_chatbot_mensagem').html();
-    clone_usuario_chatbot = str_replace('$mensagem', mensagem_chatbot, clone_usuario_chatbot);
+    clone_usuario_chatbot = str_replace('$id_pergunta_resposta', mensagem_chatbot.id_pergunta_resposta, clone_usuario_chatbot);
+    clone_usuario_chatbot = str_replace('$mensagem', mensagem_chatbot.resposta, clone_usuario_chatbot);
     clone_usuario_chatbot = str_replace('$id', contador_clone_chatbot_mensagem, clone_usuario_chatbot);
 
     $('#base_mensagens').append(clone_usuario_chatbot);
@@ -401,7 +404,7 @@
 
   function obter_resposta_ajax(mensagem_usuario) {
     
-    var mensagem_chatbot = '';
+    var resposta_chatbot = {};
     $.ajax({
         url: '/chatbot_dialog/obter_resposta_ajax',
         dataType: 'json',
@@ -412,18 +415,40 @@
             'mensagem_usuario': obter_log_ultima_mensagem_usuario().mensagem,
         },
         success: function(retorno) {
-            mensagem_chatbot = retorno.DESCRICAO;
+            resposta_chatbot.resposta = retorno.DESCRICAO;
+            resposta_chatbot.id_pergunta_resposta = retorno.id_pergunta_resposta;
         },
         error: function() {
-          mensagem_chatbot = 'Ops, houve um erro interno e não consegui achar o que procura. Verifique minha conexão.';
+          resposta_chatbot.resposta = 'Ops, houve um erro interno e não consegui achar o que procura. Verifique minha conexão.';
+          resposta_chatbot.id_pergunta_resposta = -1;
         }
     });
-    return mensagem_chatbot;
+    return resposta_chatbot;
   }
 
   function scroll_down_mensagem_enviada() {
     var scrollHeight = document.getElementById('base_mensagens').scrollHeight;
     document.getElementById('base_mensagens').scrollTop = scrollHeight;
+  }
+
+  function resposta_satisfatoria(id_pergunta_resposta) {
+    if(typeof id_pergunta_resposta == 'undefined' || id_pergunta_resposta == null) {
+      return false;
+    }
+    console.log(id_pergunta_resposta);
+    $.ajax({
+        url: '/chatbot_dialog/resposta_satisfatoria',
+        dataType: 'json',
+        method: 'post',
+        data: {
+            '_token': "{{ csrf_token() }}",
+            'id_pergunta_resposta': id_pergunta_resposta,
+        },
+        success: function(retorno) {
+        },
+        error: function() {
+        }
+    });
   }
 </script>
 @endsection

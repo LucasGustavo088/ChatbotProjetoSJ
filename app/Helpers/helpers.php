@@ -23,3 +23,25 @@ if (! function_exists('data_atual')) {
         return date('Y-m-d H:i:s');
     }
 }
+
+
+if (! function_exists('data_atual')) {
+    function data_atual() {
+        return date('Y-m-d H:i:s');
+    }
+}
+
+
+if(! function_exists('alerta')) {
+    function alerta($mensagem, $tipo = null) {
+        if($tipo == null) {
+            $tipo = 'warning';
+        }
+
+        $_SESSION['alertas'][] = [
+            'mensagem' => $mensagem,
+            'tipo' => $tipo
+        ];
+    }  
+}
+

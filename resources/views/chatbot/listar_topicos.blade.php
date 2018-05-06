@@ -11,7 +11,7 @@
             <th>ID</th>
             <th>Tópico principal</th>
             <th>Data de criação</th>
-            <th>Ações</th>
+            <th style="width: 200px;">Ações</th>
         </tr>
     </thead>
     <tbody>
@@ -22,7 +22,11 @@
 <script>
     $(document).ready(function() {
         $('.datatable').DataTable( {
-            ajax: '/chatbot/listar_topicos_ajax'
+            ajax: '/chatbot/listar_topicos_ajax',
+            searching: false,
+            bFilter: true,
+            info:     false,
+            lengthChange: false
         });
     });
 </script>

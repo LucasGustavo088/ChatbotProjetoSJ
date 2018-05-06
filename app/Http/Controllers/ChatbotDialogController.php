@@ -11,6 +11,7 @@ use App\Models\Cliente as Cliente;
 use App\Models\Pergunta as Pergunta;
 use App\Models\AtendimentoHasPergunta as AtendimentoHasPergunta;
 use App\Models\AtendimentoHasResposta as AtendimentoHasResposta;
+use App\Models\PerguntaHasResposta as PerguntaHasResposta;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers;
 use \Datetime;
@@ -29,7 +30,7 @@ class ChatbotDialogController extends Controller
         $resposta = DB::table('pergunta_has_resposta')
             ->leftJoin('pergunta', 'pergunta_has_resposta.ID_PERGUNTA', '=', 'pergunta.ID')
             ->leftJoin('resposta', 'pergunta_has_resposta.ID_RESPOSTA', '=', 'resposta.ID')
-            ->select('resposta.*')
+            ->select('resposta.*', 'pergunta_has_resposta.ID as id_pergunta_resposta')
             ->where('pergunta.DESCRICAO', 'LIKE', '%' . $mensagem_usuario . '%')
             ->get()
             ->first();
@@ -124,5 +125,24 @@ class ChatbotDialogController extends Controller
         } else {
             echo json_encode(['status' => false]);
         }
+    }
+
+    public function resposta_satisfatoria(Request $request) {
+        $retorno['status'] = false;
+
+        if(isset($request->id_pergunta_resposta)) {
+            
+            $pergunta_has_resposta = PerguntaHasResposta::where('ID', $request->id_pergunta_resposta)->get()->first();
+            $pontuacao = $pergunta_has_resposta->PONTUACAO;
+            $pontuacao = intval($pontuacao) + 1;
+
+            PerguntaHasResposta::where('ID', $request->id_pergunta_resposta)
+                ->update(['PONTUACAO' => $pontuacao]);
+
+            $retorno['status'] = true;
+        } 
+
+        echo json_encode($retorno);
+        exit();
     }
 }
