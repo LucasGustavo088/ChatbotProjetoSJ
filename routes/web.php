@@ -38,6 +38,7 @@ Route::group(['prefix' => 'chatbot'], function() {
     Route::post('p_adicionar_palavra_chave_pergunta', 'ChatbotController@p_adicionar_palavra_chave_pergunta')->name('chatbot.p_adicionar_palavra_chave_pergunta');
 });
 
+//Chatbot dialog
 Route::post('chatbot_dialog/obter_resposta_ajax', 'ChatbotDialogController@obter_resposta_ajax')->name('chatbotdialog.obter_resposta_ajax');
 Route::post('chatbot_dialog/salvar_atendimento', 'ChatbotDialogController@salvar_atendimento')->name('chatbotdialog.salvar_atendimento');
 Route::get('/chatbot_dialog/carregar_mensagens_chat/{id_atendimento}', 'ChatbotDialogController@carregar_mensagens_chat');
@@ -46,4 +47,9 @@ Route::post('/chatbot_dialog/atualizar_status_atendimento', 'ChatbotDialogContro
 Route::post('/chatbot_dialog/resposta_satisfatoria', 'ChatbotDialogController@resposta_satisfatoria');
 
 Route::get('/relatorio/listar_pendencias', 'RelatorioController@listar_pendencias')->name('relatorio.listar_pendencias');
+
+//Relatório
+Route::group(['prefix' => 'relatorio'], function() {  
+    Route::post('gerar_relatorio', 'RelatorioController@gerar_relatorio')->name('relatorio.gerar_relatorio');
+});
 

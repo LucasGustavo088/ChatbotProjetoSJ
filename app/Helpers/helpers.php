@@ -45,3 +45,15 @@ if(! function_exists('alerta')) {
     }  
 }
 
+if (! function_exists('carregar_request')) {
+    function carregar_request($request) {
+        return $_POST[$request];
+    }
+}
+
+if (! function_exists('transformar_data')) {
+    function transformar_data($data) {
+        return date('Y-m-d', strtotime($data));
+    }
+}
+

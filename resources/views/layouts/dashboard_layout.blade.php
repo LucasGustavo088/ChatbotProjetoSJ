@@ -17,9 +17,12 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/datatable.min.css') }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('vendor/jquery-ui-1.12.1.custom/jquery-ui.structure.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/jquery-ui-1.12.1.custom/jquery-ui.css') }}">
     
     <!-- Scripts -->
     <script src="{{ asset('vendor/jquery/jquery-3.2.1.min.js') }}"></script>
+    <script src="{{ asset('vendor/jquery-ui-1.12.1.custom/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap/js/popper.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
     
@@ -29,7 +32,21 @@
 
     <!-- Fonts -->
     <script src="{{ asset('fonts\fontawesome-free-5.0.8\svg-with-js\js\fontawesome-all.js') }}"></script>
-
+    
+    <style>
+        .ui-datepicker-header {
+            background: #d9534f;
+        }
+        
+        table.dataTable thead th {
+            border-top: 1px solid #dee2e6;
+            border-top: 1px solid #dee2e6;
+            border-top-width: 1px;
+            border-top-style: solid;
+            border-top-color: rgb(222, 226, 230);
+            border-bottom: rgb(222, 226, 230);
+        }
+    </style>
     
 </head>
 <body>
@@ -127,7 +144,7 @@
 
              ?>
             <div class="container-row">
-                <ol class="breadcrumb">
+                <ol class="breadcrumb" style="border: 1px solid #ddd; border-radius: 4px;">
                     @foreach ($parametros_url as $parametro)
                     <li><a href=""></a>{{ $parametro }} </li>
                     @endforeach 
@@ -144,6 +161,18 @@
             $('#sidebar').toggleClass('active');
             $(this).toggleClass('active');
         });
+
+        $(".datepicker").datepicker({
+            dateFormat: 'dd/mm/yy',
+            dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+            dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
+            dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+            monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+            monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+            nextText: 'Próximo',
+            prevText: 'Anterior'
+        });
+
     });
 
     function str_replace(find,replaceTo, str){

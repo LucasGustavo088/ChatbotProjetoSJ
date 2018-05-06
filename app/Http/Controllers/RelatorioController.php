@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Atendimento as Atendimento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class RelatorioController extends Controller
 {   
@@ -58,6 +59,16 @@ class RelatorioController extends Controller
 
         echo json_encode($resultados);
 
+    }
+
+    public function gerar_relatorio(Request $request) {
+        $data_de = transformar_data(carregar_request('data_de'));
+        $data_ate = transformar_data(carregar_request('data_ate'));
+
+        $data = [];
+
+        return PDF::loadView('relatorio.gerar_relatorio', $data)
+                    ->stream();
     }
 
 }
