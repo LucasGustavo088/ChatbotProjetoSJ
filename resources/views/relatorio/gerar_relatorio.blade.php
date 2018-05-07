@@ -66,6 +66,13 @@
         .container {
             margin: 20px;
         }
+
+        table td,
+            table th {
+                padding:5px;
+                border:1px solid #fff;
+                border-width:0 1px 1px 0;
+                }
     </style>
 </head>
 <body>
@@ -75,19 +82,27 @@
             <h2>Relatório de atendimento</h2>
         </div>
         <div>
-            Data da geração: {{ date('d/m/Y') }}
+            Periodicidade: de {{ date('d/m/Y', strtotime($relatorio['filtro']['data_de'])) }} até {{ date('d/m/Y', strtotime($relatorio['filtro']['data_ate'])) }}
         </div>
     </div>
     <hr>
-    <div class="flex-center position-ref">
+    <div>
         <table>
             <thead>
                 <tr>
-                    <th>ID do atendimento</th>
-                    <th>Descrição</th>
+                    <th style="width: 200px;">ID do atendimento</th>
+                    <th style="width: 300px;">Data de inicio</th>
+                    <th style="width: 100px;">Qnt. de interações</th>
                 </tr>
             </thead>
             <tbody>
+                @foreach($relatorio['atendimentos'] as $atendimento)
+                    <tr>
+                        <td>{{ $atendimento['ID'] }}</td>
+                        <td>{{ date('d/m/Y H:i:s', strtotime($atendimento['DATA_CRIACAO'])) }}</td>
+                        <td>{{ count($atendimento['atendimento_has_pergunta']) + count($atendimento['atendimento_has_resposta']) }}</td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
     </div>  

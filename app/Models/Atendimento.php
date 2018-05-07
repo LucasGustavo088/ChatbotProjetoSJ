@@ -44,6 +44,7 @@ class Atendimento extends Model
     }
 
     public static function carregar_cadastro($id_atendimento) {
+
         $atendimento = self::where('id', $id_atendimento)
             ->with([
                 'cliente',
@@ -55,5 +56,28 @@ class Atendimento extends Model
             ->first();
 
         return $atendimento->toArray();
+    }
+
+    public static function carregar_cadastros($filtro = []) {
+
+        $query = self::query();
+
+        $query = $query->with([
+            'cliente',
+            'atendimento_has_pergunta.pergunta',
+            'atendimento_has_resposta.resposta'
+        ]);
+
+        if(isset($filtro['data_de'])) {
+            $query->where('DATA_CRIACAO', '>=', $filtro['data_de']);
+        }
+
+        if(isset($filtro['data_ate'])) {
+            $query->where('DATA_CRIACAO', '<=', $filtro['data_ate']);
+        }
+
+        $query = $query->get();
+
+        return $query->toArray();
     }
 }

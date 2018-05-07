@@ -55,7 +55,7 @@ class ChatbotDialogController extends Controller
         
         $atendimento = new Atendimento();
         $atendimento->ATIVO = '1';
-        $atendimento->STATUS = 'chatbot';
+        $atendimento->STATUS = 'Não finalizado';
         $atendimento->ID_CLIENTE = $cliente->id;
         $atendimento->DATA_ATUALIZACAO = data_atual();
         $atendimento->DATA_CRIACAO = data_atual();

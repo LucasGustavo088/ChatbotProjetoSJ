@@ -22,12 +22,12 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group row col-md-6">
+            <!-- <div class="form-group row col-md-6">
                 <label for="outro_filtro" class="col-md-12 control-label">Outro filtro</label>
                 <div class="col-md-10">
                     <input type="text" required name="outro_filtro" placeholder="Outro filtro" class="form-control" id="outro_filtro">
                 </div>
-            </div>
+            </div> -->
 
             <div class="form-group row col-md-12" style="margin-top: 15px;">
                 <button type="submit" id="gerar_relatorio" style="float: right" class="btn btn-success"><i class="fas fa-clipboard"></i> Gerar</button>
@@ -42,7 +42,7 @@
             <th>ID</th>
             <th>Nome do cliente</th>
             <th>Email</th>
-            <th>Perguntas realizadas</th>
+            <th>Data</th>
             <th>Status</th>
             <th style="width: 200px;">Ações</th>
         </tr>
