@@ -64,7 +64,7 @@ class RelatorioController extends Controller
     public function gerar_relatorio(Request $request) {
         $relatorio = [];
         $filtro = [];
-        debug(date('d/m/Y H:i:s'));die;
+
         $data_de = transformar_data(carregar_request('data_de'));
         $filtro['data_de'] = $data_de;
 
@@ -73,7 +73,38 @@ class RelatorioController extends Controller
 
         $relatorio['filtro'] = $filtro;
         $relatorio['atendimentos'] = Atendimento::carregar_cadastros($filtro);
-        debug($relatorio);die;
+
+        $relatorio['quantidade_atendimentos']['1_tentativas'] = 0;
+        $relatorio['quantidade_atendimentos']['2_tentativas'] = 0;
+        $relatorio['quantidade_atendimentos']['3_tentativas'] = 0;
+        $relatorio['quantidade_atendimentos']['encaminhamento_humano'] = 0;
+
+        foreach($relatorio['atendimentos'] as &$atend) {
+
+            //Quantidade de atendimentos
+            if(count($atend['atendimento_has_pergunta']) == 1) {
+                $relatorio['quantidade_atendimentos']['1_tentativas'] += 1;
+            } else if(count($atend['atendimento_has_pergunta']) == 2) {
+                $relatorio['quantidade_atendimentos']['2_tentativas'] += 1;
+            } else if(count($atend['atendimento_has_pergunta']) == 3) {
+                $relatorio['quantidade_atendimentos']['3_tentativas'] += 1;
+            } else if(count($atend['atendimento_has_pergunta']) > 3) {
+                $relatorio['quantidade_atendimentos']['encaminhamento_humano'] += 1;
+            }
+
+            //Duração da interação
+            if($atend['DATA_FINALIZACAO'] != '' && $atend['DATA_CRIACAO'] != '') {
+                $data_criacao = date_create($atend['DATA_CRIACAO']);
+                $data_finalizacao = date_create($atend['DATA_FINALIZACAO']);
+                $duracao = date_diff($data_criacao, $data_finalizacao);
+                $atend['DURACAO_ATENDIMENTO'] = ($duracao->h != 0 ? $duracao->h . ' horas ' : '') . ($duracao->i != 0 ? $duracao->i . ' minutos ' : '') . ($duracao->s != 0 ? $duracao->s . ' segundos ' : '');
+            } else {
+                $atend['DURACAO_ATENDIMENTO'] = 'Não finalizado';
+            }
+
+        }
+
+
         return PDF::loadView('relatorio.gerar_relatorio', compact('relatorio'))
                     ->stream();
     }

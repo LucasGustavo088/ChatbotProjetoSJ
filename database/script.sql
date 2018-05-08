@@ -275,6 +275,7 @@ DEFAULT CHARACTER SET = latin1;
 alter table pergunta_has_resposta add ID_TOPICO INT(11) NULL;
 alter table pergunta_has_resposta ADD CONSTRAINT pergunta_has_resposta_fk2 FOREIGN KEY (ID_TOPICO) REFERENCES topico(ID);
 alter table pergunta_has_resposta CHANGE PONT_RESPOSTA PONTUACAO INT(11) NULL;
+ALTER TABLE atendimento add DATA_FINALIZACAO DATETIME NULL;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

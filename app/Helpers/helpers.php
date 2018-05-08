@@ -46,14 +46,22 @@ if(! function_exists('alerta')) {
 }
 
 if (! function_exists('carregar_request')) {
-    function carregar_request($request) {
-        return $_POST[$request];
+    function carregar_request($request = '') {
+
+        if($request != '') {
+            return $_POST[$request];
+        } else {
+            return $_POST;
+        }
     }
 }
 
 if (! function_exists('transformar_data')) {
     function transformar_data($data) {
-        return date('Y-m-d', strtotime($data));
+        $data = explode('/', $data);
+        $data = $data[2] . '-' . $data[1] . '-' . $data[0];
+        
+        return $data;
     }
 }
 

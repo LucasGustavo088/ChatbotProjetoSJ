@@ -90,7 +90,7 @@
         <div class="col-xs-10 col-md-10">
             <div class="messages msg_receive">
                 <p>$mensagem</p>
-                <time datetime="2009-11-13T20:00">Chatbot • Agora mesmo <button onclick="finalizar_chatbot(); resposta_satisfatoria($id_pergunta_resposta)" style="width: 57px; height: 20px; font-size: 8px;" class="btn btn-success satisfacao" type="button">Satisfeito?</button></time>
+                <time datetime="2009-11-13T20:00">Chatbot • Agora mesmo <button onclick="finalizar_atendimento(); resposta_satisfatoria($id_pergunta_resposta)" style="width: 57px; height: 20px; font-size: 8px;" class="btn btn-success satisfacao" type="button">Satisfeito?</button></time>
             </div>
         </div>
     </div>
@@ -234,9 +234,23 @@
     } 
   }
 
-  function finalizar_chatbot() {
+  function finalizar_atendimento() {
     $('#base_mensagens').html('');
     $('#base_mensagens').append('<br><br><h4 style="text-align: center"><strong>Obrigado!</strong></h4><br><br><br><button type="button" class="btn btn-success" style="margin-left: 60px;" onclick="location.reload();">Perguntar novamente</button>');
+
+    $.ajax({
+        url: '/chatbot_dialog/finalizar_atendimento',
+        dataType: 'json',
+        method: 'post',
+        async: false,
+        data: {
+            '_token': "{{ csrf_token() }}",
+            'id_atendimento': id_atendimento
+        },
+        error: function() {
+          alert('Ops, houve um erro interno ao finalizar o atendimento.');
+        }
+    });
   }
 
   function salvar_informacoes_usuario() {
@@ -435,7 +449,7 @@
     if(typeof id_pergunta_resposta == 'undefined' || id_pergunta_resposta == null) {
       return false;
     }
-    console.log(id_pergunta_resposta);
+
     $.ajax({
         url: '/chatbot_dialog/resposta_satisfatoria',
         dataType: 'json',

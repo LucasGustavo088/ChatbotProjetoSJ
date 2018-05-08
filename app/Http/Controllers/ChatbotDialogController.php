@@ -66,6 +66,21 @@ class ChatbotDialogController extends Controller
         exit();
     }
 
+    public function finalizar_atendimento(Request $request) {
+        $retorno['status'] = false;
+
+        $id_atendimento = carregar_request('id_atendimento');
+        if($id_atendimento != '') {
+            Atendimento::where('ID', $id_atendimento)
+                ->update(['STATUS' => 'finalizado', 'DATA_FINALIZACAO' => data_atual()]);
+
+            $retorno['status'] = true;
+        }
+
+        echo json_encode($retorno);
+        exit();
+    }
+
     public function salvar_mensagem_banco(Request $request) {
         
         if($request->pergunta_ou_resposta == 'pergunta') {

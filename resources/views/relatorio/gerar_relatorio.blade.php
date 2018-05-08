@@ -82,7 +82,8 @@
             <h2>Relatório de atendimento</h2>
         </div>
         <div>
-            Periodicidade: de {{ date('d/m/Y', strtotime($relatorio['filtro']['data_de'])) }} até {{ date('d/m/Y', strtotime($relatorio['filtro']['data_ate'])) }}
+            <strong>Periodicidade:</strong> de {{ date('d/m/Y', strtotime($relatorio['filtro']['data_de'])) }} até {{ date('d/m/Y', strtotime($relatorio['filtro']['data_ate'])) }}
+            
         </div>
     </div>
     <hr>
@@ -91,8 +92,9 @@
             <thead>
                 <tr>
                     <th style="width: 200px;">ID do atendimento</th>
-                    <th style="width: 300px;">Data de inicio</th>
+                    <th style="width: 200px;">Data de inicio</th>
                     <th style="width: 100px;">Qnt. de interações</th>
+                    <th style="width: 100px;">Duração da interação</th>
                 </tr>
             </thead>
             <tbody>
@@ -101,10 +103,32 @@
                         <td>{{ $atendimento['ID'] }}</td>
                         <td>{{ date('d/m/Y H:i:s', strtotime($atendimento['DATA_CRIACAO'])) }}</td>
                         <td>{{ count($atendimento['atendimento_has_pergunta']) + count($atendimento['atendimento_has_resposta']) }}</td>
+                        <td>{{ $atendimento['DURACAO_ATENDIMENTO'] }}</td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
+    </div>
+    <hr>
+    <div>
+        <h2>Detalhes</h2>
+        <div>
+            <div>
+                <strong>Quantidade de atendimentos:</strong> {{ count($relatorio['atendimentos']) }}
+            </div>
+            <div>
+                <strong>Quantidade de atendimentos resolvidos na pelo chatbot na primeira tentativa: </strong> {{ $relatorio['quantidade_atendimentos']['1_tentativas'] }}
+            </div>
+            <div>
+                <strong>Quantidade de atendimentos resolvidos na pelo chatbot na segunda tentativa: </strong> {{ $relatorio['quantidade_atendimentos']['2_tentativas'] }}
+            </div>
+            <div>
+                <strong>Quantidade de atendimentos resolvidos na pelo chatbot na terceira tentativa: </strong> {{ $relatorio['quantidade_atendimentos']['3_tentativas'] }}
+            </div>
+            <div>
+                <strong>Quantidade de atendimentos encaminhado para atendimento humano: </strong> {{ $relatorio['quantidade_atendimentos']['encaminhamento_humano'] }} 
+            </div>
+        </div>
     </div>  
 </div>
 </body>
