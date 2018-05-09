@@ -15,7 +15,7 @@
                 <li><a href="#">Serviços</a></li>
                 <li><a href="#">Quem somos</a></li>
                 <li><a href="#">Fale conosco</a></li>
-                <li><a href="#">Cadastre-se</a></li>
+                <!-- <li><a href="#">Cadastre-se</a></li> -->
             </ul>
             <input name="txtProcurar" id="txtProcurar" type="text"  placeholder="Digite aqui o que você procura...">
         </div>
