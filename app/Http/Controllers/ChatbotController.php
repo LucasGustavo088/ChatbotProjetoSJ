@@ -120,10 +120,10 @@ class ChatbotController extends Controller
         }
 
         $topico = new Topico();
-        // if($topico->verificar_nome_topico_existente($topicos_principal)) {
-        //     alerta('O nome do tópico já existe.', 'erro');
-        //     voltar_atras();
-        // }
+        if($topico->verificar_nome_topico_existente($topicos_principal)) {
+            alerta('O nome do tópico já existe.', 'erro');
+            voltar_atras();
+        }
 
 
         $id_topico = $topico->salvar_topico($topicos_principal);
