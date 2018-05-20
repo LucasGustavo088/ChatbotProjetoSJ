@@ -429,8 +429,9 @@
             'mensagem_usuario': obter_log_ultima_mensagem_usuario().mensagem,
         },
         success: function(retorno) {
-            resposta_chatbot.resposta = retorno.DESCRICAO;
-            resposta_chatbot.id_pergunta_resposta = retorno.id_pergunta_resposta;
+          console.log(retorno);
+            resposta_chatbot.resposta = retorno.pergunta_has_resposta.resposta.DESCRICAO;
+            resposta_chatbot.id_pergunta_resposta = retorno.pergunta_has_resposta.ID_RESPOSTA;
         },
         error: function() {
           resposta_chatbot.resposta = 'Ops, houve um erro interno e não consegui achar o que procura. Verifique minha conexão.';

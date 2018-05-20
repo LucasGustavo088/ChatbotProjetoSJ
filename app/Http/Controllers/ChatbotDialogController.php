@@ -12,6 +12,7 @@ use App\Models\Pergunta as Pergunta;
 use App\Models\AtendimentoHasPergunta as AtendimentoHasPergunta;
 use App\Models\AtendimentoHasResposta as AtendimentoHasResposta;
 use App\Models\PerguntaHasResposta as PerguntaHasResposta;
+use App\Models\PalavraChaveHasPergunta as PalavraChaveHasPergunta;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers;
 use \Datetime;
@@ -27,21 +28,105 @@ class ChatbotDialogController extends Controller
 
     public function obter_resposta_ajax() {
         $mensagem_usuario = $_POST['mensagem_usuario'];
-        
-        $resposta = DB::table('pergunta_has_resposta')
-            ->leftJoin('pergunta', 'pergunta_has_resposta.ID_PERGUNTA', '=', 'pergunta.ID')
-            ->leftJoin('resposta', 'pergunta_has_resposta.ID_RESPOSTA', '=', 'resposta.ID')
-            ->select('resposta.*', 'pergunta_has_resposta.ID as id_pergunta_resposta')
-            ->where('pergunta.DESCRICAO', 'LIKE', '%' . $mensagem_usuario . '%')
-            ->get()
-            ->first();
+
+        $palavras_chave_mensagem = $this->transformar_string_palavras_chave($mensagem_usuario);
+        $palavra_chave_perguntas = array();
+
+        /*
+        * Obtendo todas as perguntas com as palavras-chaves da mensagem perguntada. 
+        */ 
+        foreach($palavras_chave_mensagem as $palavra_chave) {
+            $palavra_chave_cadastro = PalavraChave::obter_palavra_chave_com_string($palavra_chave);
+            if(!is_array($palavra_chave_cadastro)) {
+                continue;
+            }
+
+            foreach($palavra_chave_cadastro as $palavra_chave) {
+                $palavra_chave_perguntas[] = PalavraChave::carregar_cadastro_completo($palavra_chave['ID']);
+
+            }
+        }
+        /*
+        * Verificando a pergunta com maior peso a partir das palavras-chaves
+        */
+        foreach($palavra_chave_perguntas as &$palavra_chave_pergunta) {
+
+            foreach($palavra_chave_pergunta['palavra_chave_has_pergunta'] as &$palavra_chave_has_pergunta) {
+                if(empty($palavra_chave_has_pergunta['pergunta'])) {
+                    continue;
+                }
+
+                /* ==== PESOS DE DEFINIÇÃO DE MELHOR RESPOSTA =====*/
+                $peso = 0;
+
+                //1) Número de ocorrências 
+                $peso += $this->obterPesoComparacaoString(
+                    $palavra_chave_has_pergunta['pergunta']['DESCRICAO'],
+                    $palavras_chave_mensagem
+                );
+
+                //2) Respostas satisfatórias
+                if(isset($palavra_chave_has_pergunta['pergunta']['pergunta_has_resposta']['PONTUACAO'])) {
+                    $peso += $palavra_chave_has_pergunta['pergunta']['pergunta_has_resposta']['PONTUACAO'];
+                }
+
+                //3) Palavras-chaves contém no tópico principal
+                if(isset($palavra_chave_has_pergunta['pergunta']['pergunta_has_resposta']['topico']['NOME'])) {
+                    $peso += $this->obterPesoComparacaoString(
+                        $palavra_chave_has_pergunta['pergunta']['pergunta_has_resposta']['topico']['NOME'],
+                        $palavras_chave_mensagem
+                    );
+                }
+
+                $palavra_chave_has_pergunta['pergunta']['peso_pergunta'] = $peso;
+            }
+        }        
+
+        /*
+        * Verificando qual pergunta_has_resposta tem maior peso de provável resposta.
+        */
+        $resposta = [];
+        $maior_peso = -1;
+        foreach($palavra_chave_perguntas as $palavra_chave_pergunta) {
+            foreach($palavra_chave_pergunta['palavra_chave_has_pergunta'] as &$palavra_chave_has_pergunta) {
+                if(empty($palavra_chave_has_pergunta['pergunta']['pergunta_has_resposta']['resposta']['DESCRICAO'])) {
+                    continue;
+                } else {
+                    if($palavra_chave_has_pergunta['pergunta']['pergunta_has_resposta']['PONTUACAO'] > $maior_peso) {
+                        $resposta = $palavra_chave_has_pergunta['pergunta'];
+                    }
                     
-        if($resposta == null) {
-            $resposta['DESCRICAO'] = $this->mensagem_resposta_nao_encontrada;
+                }
+            }
+        }
+        
+        $this->salvar_pergunta_usuario_externo($mensagem_usuario);
+
+        if(empty($resposta)) {
+            $resposta['pergunta_has_resposta']['resposta']['DESCRICAO'] = $this->mensagem_resposta_nao_encontrada;
+            $resposta['pergunta_has_resposta']['ID_RESPOSTA'] = -1;
         }
 
         echo json_encode($resposta);
         exit();
+    }
+
+    public function obterPesoComparacaoString(String $texto, Array $possiveis_ocorrencias) {
+        /*
+        * Pesos:
+        * Ocorrências no texto: 1 ponto;
+        */
+
+        $peso = 0;
+
+        foreach($possiveis_ocorrencias as $possivel_ocorrencia) {
+            $ocorrencias = substr_count($texto, $possivel_ocorrencia);
+            if($ocorrencias > 0) {
+                $peso++;
+            }
+        }
+
+        return $peso;
     }
 
     public function salvar_atendimento(Request $request) {
@@ -159,5 +244,53 @@ class ChatbotDialogController extends Controller
 
         echo json_encode($retorno);
         exit();
+    }
+
+    public function transformar_string_palavras_chave($string) {
+        $string = $this->escapar_caracteres_notacao($string);
+
+        $palavras_chave = [];
+        $palavras_chave = explode(' ', $string);
+        return $palavras_chave;
+    }
+
+    public function escapar_caracteres_notacao($string) {
+        $string = str_replace('(', '', $string);
+        $string = str_replace(')', '', $string);
+        $string = str_replace('.', '', $string);
+        $string = str_replace('?', '', $string);
+        $string = str_replace('!', '', $string);
+
+        return $string;
+    }
+
+    public function salvar_pergunta_usuario_externo($pergunta) {
+        $pergunta_cadastro = new Pergunta();
+        $pergunta_cadastro->DESCRICAO = $pergunta;
+        $pergunta_cadastro->DATA_CRIACAO = data_atual();
+        $pergunta_cadastro->DATA_ATUALIZACAO = data_atual();
+        $pergunta_cadastro->USUARIO_EXTERNO = '1';
+        $pergunta_cadastro->ATIVO = '1';
+        $pergunta_cadastro->save();
+        
+        $palavras_chaves_pergunta = $this->transformar_string_palavras_chave($pergunta);
+        foreach ($palavras_chaves_pergunta as $key_pergunta => $palavra_chave_pergunta) {
+            if(PalavraChave::verificar_ja_existe_palavra_chave($palavra_chave_pergunta)) {
+                $id_palavra_chave = PalavraChave::where('NOME', $palavra_chave_pergunta)->get()->first()->ID;
+            } else {
+                $palavra_chave_principal = new PalavraChave();
+                $palavra_chave_principal->NOME = $palavra_chave_pergunta;
+                $palavra_chave_principal->ATIVO = '1';
+                $palavra_chave_principal->DATA_CRIACAO = data_atual();
+                $palavra_chave_principal->DATA_ATUALIZACAO = data_atual();
+                $palavra_chave_principal->save();
+                $id_palavra_chave = $palavra_chave_principal->id;
+            }    
+
+            $palavra_chave_has_pergunta = new PalavraChaveHasPergunta();
+            $palavra_chave_has_pergunta->ID_PERGUNTA = $pergunta_cadastro->id; 
+            $palavra_chave_has_pergunta->ID_PALAVRA_CHAVE = $id_palavra_chave; 
+            $palavra_chave_has_pergunta->save();
+        }
     }
 }

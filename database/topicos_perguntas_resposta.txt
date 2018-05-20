@@ -1,0 +1,12 @@
+Tópico: certidão de nascimento
+  
+  Pergunta: O que é certidão de nascimento?
+  Resposta: Certidão de nascimento é um documento cujo conteúdo é extraído do assento de nascimento lavrado em um livro depositado aos cuidados de um cartório de Registo Civil.
+
+
+Tópico: Certidão de casamento
+  
+  Pergunta: Como tirar a segunda via da certidão de casamento?
+
+  Resposta: Você só pode pedir a segunda via da certidão de casamento neste portal se o cartório onde tirou a primeira via for parceiro dele. Então, clique em “Endereço dos cartórios” (no lado esquerdo da tela), selecione o tipo de cartório (para certidão de casamento, é Registro Civil), o estado e a cidade.
+

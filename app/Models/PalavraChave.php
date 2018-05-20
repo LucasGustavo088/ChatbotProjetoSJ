@@ -9,7 +9,7 @@ class PalavraChave extends Model
     protected $table = 'palavra_chave';
     public $timestamps = false; 
 
-    public static function verificar_ja_existe_palavra_chave($palavra_chave) { COMO - como 
+    public static function verificar_ja_existe_palavra_chave($palavra_chave) { 
 
         $palavra_chave_cadastro = self::where('NOME', $palavra_chave)->get()->first();
 
@@ -21,32 +21,28 @@ class PalavraChave extends Model
 
     }
 
-    public function atendimento_has_pergunta() {
-        return $this->hasMany('App\Models\AtendimentoHasPergunta', 'ID_ATENDIMENTO', 'ID');
-    }
-
-    public function atendimento_has_resposta() {
-        return $this->hasMany('App\Models\AtendimentoHasResposta', 'ID_ATENDIMENTO', 'ID');
-    }
-
-    public static function carregar_cadastro($id_atendimento) {
-
-        $atendimento = self::where('id', $id_atendimento)
-            ->with([
-                'cliente',
-                'atendimento_has_pergunta.pergunta',
-                'atendimento_has_resposta.resposta'
-            ])
-            ->where('id', $id_atendimento)
-            ->get()
-            ->first();
-
-        return $atendimento->toArray();
+    public function palavra_chave_has_pergunta() {
+        return $this->hasMany('App\Models\PalavraChaveHasPergunta', 'ID_PALAVRA_CHAVE', 'ID');
     }
 
     public static function carregar_cadastro_completo($id) {
 
-        return $topico;
+        $palavra_chave = self::where('id', $id)
+            ->with([
+                'palavra_chave_has_pergunta.pergunta.pergunta_has_resposta.resposta',
+                'palavra_chave_has_pergunta.pergunta.pergunta_has_resposta.topico',
+            ])
+            ->get()
+            ->first();
+
+        return $palavra_chave->toArray();
+    }
+
+    public static function obter_palavra_chave_com_string($palavra_chave) {
+        $query = self::where('NOME', $palavra_chave)
+            ->get();
+
+        return $query->toArray();
     }
 
 }
