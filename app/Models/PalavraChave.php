@@ -21,12 +21,32 @@ class PalavraChave extends Model
 
     }
 
-    public static function carregar_topico($id) {
-        // $topico = PalavraChave->hasMany('App\Models\PerguntaHasResposta');
+    public function atendimento_has_pergunta() {
+        return $this->hasMany('App\Models\AtendimentoHasPergunta', 'ID_ATENDIMENTO', 'ID');
+    }
 
-        // ->where('PALAVRA_CHAVE_PRINCIPAL', '1')->where('ID', $request->id)->get()->first();
+    public function atendimento_has_resposta() {
+        return $this->hasMany('App\Models\AtendimentoHasResposta', 'ID_ATENDIMENTO', 'ID');
+    }
 
-        // return $topico;
+    public static function carregar_cadastro($id_atendimento) {
+
+        $atendimento = self::where('id', $id_atendimento)
+            ->with([
+                'cliente',
+                'atendimento_has_pergunta.pergunta',
+                'atendimento_has_resposta.resposta'
+            ])
+            ->where('id', $id_atendimento)
+            ->get()
+            ->first();
+
+        return $atendimento->toArray();
+    }
+
+    public static function carregar_cadastro_completo($id) {
+
+        return $topico;
     }
 
 }
