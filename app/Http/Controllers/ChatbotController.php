@@ -112,7 +112,6 @@ class ChatbotController extends Controller
     }
 
     public function p_adicionar_palavra_chave_pergunta(Request $request) {
-
         $topicos_principal = $request->topico;
 
         if($topicos_principal == '') {
