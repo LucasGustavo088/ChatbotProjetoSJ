@@ -34,8 +34,16 @@ if (! function_exists('data_atual')) {
 
 if(! function_exists('alerta')) {
     function alerta($mensagem, $tipo = null) {
+
+
+        if(!isset($_SESSION)){
+            session_start();
+        }
+
         if($tipo == null) {
             $tipo = 'warning';
+        } else if($tipo == 'error' || $tipo == 'erro') {
+            $tipo = 'danger';
         }
 
         $_SESSION['alertas'][] = [
@@ -64,4 +72,15 @@ if (! function_exists('transformar_data')) {
         return $data;
     }
 }
+
+if (! function_exists('voltar_atras')) {
+    function voltar_atras() {
+        if (!empty($_SERVER['HTTP_REFERER'])) {
+            header("Location: ".$_SERVER['HTTP_REFERER']);
+        }
+
+        die;
+    }
+}
+
 

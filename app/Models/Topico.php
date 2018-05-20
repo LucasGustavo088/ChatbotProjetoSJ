@@ -20,4 +20,19 @@ class Topico extends Model
         return $topico->id;
     }
 
+    public static function verificar_nome_topico_existente($topico) {
+        $topico_existente = self::
+            where('NOME', $topico)
+            ->where('ATIVO', '1')
+            ->get()
+            ->toArray();
+            
+        if(empty($topico_existente)) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
 }

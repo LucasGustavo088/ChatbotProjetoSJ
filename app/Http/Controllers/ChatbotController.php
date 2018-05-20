@@ -11,6 +11,7 @@ use App\Models\PalavraChaveHasResposta as PalavraChaveHasResposta;
 use App\Models\PalavraChaveHasPergunta as PalavraChaveHasPergunta;
 use App\Models\Topico as Topico;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 use App\Http\Controllers;
 
@@ -27,6 +28,7 @@ class ChatbotController extends Controller
 
     public function __construct()
     {
+        session_start();
         $this->middleware('auth');
     }
 
@@ -71,6 +73,7 @@ class ChatbotController extends Controller
     }
 
     public function adicionar_palavra_chave_pergunta() {
+
         return view('chatbot.adicionar_palavra_chave_pergunta')
             ->with('palavras_chaves_prefixo_principais', (object) $this->palavras_chaves_prefixo_principais);
     }
@@ -117,10 +120,22 @@ class ChatbotController extends Controller
         }
 
         $topico = new Topico();
+        // if($topico->verificar_nome_topico_existente($topicos_principal)) {
+        //     alerta('O nome do tópico já existe.', 'erro');
+        //     voltar_atras();
+        // }
+
+
         $id_topico = $topico->salvar_topico($topicos_principal);
 
         $respostas = $request->respostas;
         $perguntas = $request->perguntas;
+
+        if(empty($perguntas)) {
+            alerta('As perguntas estão vazias.', 'erro');
+            voltar_atras();
+        }
+
         $palavras_chaves_resposta = [];
         foreach($respostas as $key => $resposta) {
             $resposta_cadastro = new Resposta();
@@ -190,7 +205,7 @@ class ChatbotController extends Controller
             }
             
         }
-        
+
         alerta('Tópico cadastrado com sucesso', 'success');
 
         return redirect()->route('chatbot.listar_topicos');
@@ -198,8 +213,10 @@ class ChatbotController extends Controller
     }
 
     public function transformar_string_palavras_chave($string) {
+        $string = $this->escapar_caracteres_notacao($string);
+
         $palavras_chave = [];
-        $palavras_chave = explode(' ', $this->escapar_caracteres_notacao($string));
+        $palavras_chave = explode(' ', $string);
         return $palavras_chave;
     }
 

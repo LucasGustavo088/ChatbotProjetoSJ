@@ -60,7 +60,8 @@
             searching: false,
             bFilter: true,
             info:     false,
-            lengthChange: false
+            lengthChange: false,
+            order: [[ 0, "desc" ]]
         });
 
         $('#toggle_relatorio').click(function() {

@@ -10,6 +10,7 @@ class UtilizadorController extends Controller
 
     public function __construct()
     {
+        session_start();
     }
 
     public function remover_alerta(Request $request) {

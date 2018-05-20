@@ -27,6 +27,7 @@ class ChatbotDialogController extends Controller
 
     public function obter_resposta_ajax() {
         $mensagem_usuario = $_POST['mensagem_usuario'];
+        
         $resposta = DB::table('pergunta_has_resposta')
             ->leftJoin('pergunta', 'pergunta_has_resposta.ID_PERGUNTA', '=', 'pergunta.ID')
             ->leftJoin('resposta', 'pergunta_has_resposta.ID_RESPOSTA', '=', 'resposta.ID')
@@ -34,7 +35,6 @@ class ChatbotDialogController extends Controller
             ->where('pergunta.DESCRICAO', 'LIKE', '%' . $mensagem_usuario . '%')
             ->get()
             ->first();
-        // $resposta = Resposta::where('DESCRICAO', 'like', '%' . $mensagem_usuario . '%')->get()->first();
                     
         if($resposta == null) {
             $resposta['DESCRICAO'] = $this->mensagem_resposta_nao_encontrada;

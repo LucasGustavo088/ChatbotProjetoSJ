@@ -30,6 +30,7 @@ class DashboardController extends Controller
             ->leftJoin('cliente', 'cliente.id', '=', 'atendimento.ID_CLIENTE')
             ->select('atendimento.*', 'cliente.*')
             ->where('atendimento.ativo', '=', '1')
+            ->orderBy('atendimento.ID', 'DESC')
             ->get();
 
         $aaData = [];
@@ -63,10 +64,6 @@ class DashboardController extends Controller
 
 
         echo json_encode($resultados);
-
-    }
-
-    public function query_com_doctrine() {
 
     }
 
