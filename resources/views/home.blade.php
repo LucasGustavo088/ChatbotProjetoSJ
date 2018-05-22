@@ -216,6 +216,7 @@
   function adicionar_mensagem_usuario_atendente_caixa(mensagem) {
     var clone_usuario_chatbot = $('#clone_chatbot_mensagem').html();
     clone_usuario_chatbot = str_replace('$mensagem', mensagem, clone_usuario_chatbot);
+    clone_usuario_chatbot = str_replace('$id_pergunta_resposta', null, clone_usuario_chatbot);
     clone_usuario_chatbot = str_replace('$id', contador_clone_chatbot_mensagem, clone_usuario_chatbot);
 
     $('#base_mensagens').append(clone_usuario_chatbot);
@@ -237,7 +238,7 @@
   function finalizar_atendimento() {
     $('#base_mensagens').html('');
     $('#base_mensagens').append('<br><br><h4 style="text-align: center"><strong>Obrigado!</strong></h4><br><br><br><button type="button" class="btn btn-success" style="margin-left: 60px;" onclick="location.reload();">Perguntar novamente</button>');
-
+    travar_atualizacao = true;
     $.ajax({
         url: '/chatbot_dialog/finalizar_atendimento',
         dataType: 'json',
@@ -370,6 +371,10 @@
       return false;
     }
 
+    if(contador_resposta >= 3) {
+        return false;
+    }
+
     var mensagem_chatbot = {};
     if(typeof mensagem != 'undefined') {
       mensagem_chatbot.resposta = mensagem;
@@ -429,7 +434,6 @@
             'mensagem_usuario': obter_log_ultima_mensagem_usuario().mensagem,
         },
         success: function(retorno) {
-          console.log(retorno);
             resposta_chatbot.resposta = retorno.pergunta_has_resposta.resposta.DESCRICAO;
             resposta_chatbot.id_pergunta_resposta = retorno.pergunta_has_resposta.ID_RESPOSTA;
         },
