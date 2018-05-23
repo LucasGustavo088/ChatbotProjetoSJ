@@ -152,7 +152,27 @@
             </div><!-- row -->
         </div>
     </div><!-- ser -->
-
+    
+    <div class="row chat-window col-xs-5 col-md-3" id="chatbot1" style="margin-left:10px;">
+        <div class="col-xs-12 col-md-12">
+          <div class="panel panel-default">
+            <div class="panel-heading top-bar grabbable">
+                <div class="col-md-8 col-xs-8">
+                    <h3 class="panel-title"> <strong>Chatbot Cartório</strong></h3>
+                </div>
+                <div class="col-md-4 col-xs-4" style="text-align: right;">
+                    <a href="#"><span id="minim_chat_window" class="glyphicon glyphicon-minus icon_minim"></span></a>
+                </div>
+            </div>
+            <div class="panel-body msg_container_base" style="height: 300px;" id="base_mensagens">
+                
+            </div>
+            <div class="panel-footer">
+                <input  id="mensagem_input" type="text" class="form-control" placeholder="Escreva aqui..." />
+            </div>
+          </div>
+        </div>
+    </div>
 
     <!-- FOOTER -->
     <div id="f">
