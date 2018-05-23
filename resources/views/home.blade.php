@@ -18,6 +18,7 @@
                 <li><a href="#red">SOBRE</a></li>
                 <li><a href="#eq">EQUIPE</a></li>
                 <li><a href="#ser">FALE CONOSCO</a></li>
+                <li><a href="{{ route('login')}}">LOGIN</a></li>
             <li><a data-toggle="modal" data-target="#myModal" href="#myModal"><i class="fa fa-envelope-o"></i></a></li>
           </ul>
         </div><!--/.nav-collapse -->
