@@ -1,72 +1,170 @@
 @extends('layouts.home_layout')
 
 @section('content')
-<style></style>
-<!-- Main jumbotron for a primary marketing message or call to action -->
-<div class="row">
-    <div class="col-md-12" id="navegacao">
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">CART<i class="fa fa-circle"></i>RIO</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right"> 
+                <li><a href="#">HOME</a></li>
+                <li><a href="#red">SOBRE</a></li>
+                <li><a href="#eq">EQUIPE</a></li>
+                <li><a href="#ser">FALE CONOSCO</a></li>
+            <li><a data-toggle="modal" data-target="#myModal" href="#myModal"><i class="fa fa-envelope-o"></i></a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div id="headerwrap" src="{{ asset('images/header-bg.jpg') }}">
         <div class="container">
-            <div class="row" id="img_logo" >
-                <img src="{{ asset('images/logo.png') }}">
-                <h3 id="header_titulo">Cartório Projeto Interdisciplinar</h3>
-            </div>
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#">Serviços</a></li>
-                <li><a href="#">Quem somos</a></li>
-                <li><a href="#">Fale conosco</a></li>
-                <!-- <li><a href="#">Cadastre-se</a></li> -->
-            </ul>
-            <input name="txtProcurar" id="txtProcurar" type="text"  placeholder="Digite aqui o que você procura...">
-        </div>
-    </div>
-</div>   
-</div>
-<div class="container">
-    <!-- Example row of columns -->
-    <div class="row">
-        <div class="col-md-4">
-            <h2>Cartório</h2>
-            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-            <p><a class="btn btn-default" href="#" role="button">Ver detalhes &raquo;</a></p>
-        </div>
-        <div class="col-md-4">
-            <h2>São Judas Tadeu</h2>
-            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-            <p><a class="btn btn-default" href="#" role="button">Ver detalhes &raquo;</a></p>
-        </div>
-        <div class="col-md-4">
-            <h2>Alunos</h2>
-            <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-            <p><a class="btn btn-default" href="#" role="button">Ver detalhes &raquo;</a></p>
-        </div>
-    </div>
-    <div class="row chat-window col-xs-5 col-md-3" id="chatbot1" style="margin-left:10px;">
-        <div class="col-xs-12 col-md-12">
-          <div class="panel panel-default">
-            <div class="panel-heading top-bar grabbable">
-                <div class="col-md-8 col-xs-8">
-                    <h3 class="panel-title"> <strong>Chatbot Cartório</strong></h3>
+            <div class="row centered">
+                <div class="col-lg-8 col-lg-offset-2">
+                <br></br>
+                <h1>Esclareça Suas <b>Dúvidas</b></h1>
+                <h2>Com Agilidade e Seguraça</h2>
                 </div>
-                <div class="col-md-4 col-xs-4" style="text-align: right;">
-                    <a href="#"><span id="minim_chat_window" class="glyphicon glyphicon-minus icon_minim"></span></a>
+            </div><!-- row -->
+        </div><!-- container -->
+    </div><!-- headerwrap -->
+
+    <!--Quem somos -->
+    <div id="red">
+        <div class="container">
+            <div class="row centered">
+                <div class="col-lg-8 col-lg-offset-2">
+                <br></br>
+                <br></br>
+                <img src="{{ asset('images/maoV.png') }}" width="400" height="250" alt="">
                 </div>
-            </div>
-            <div class="panel-body msg_container_base" style="height: 300px;" id="base_mensagens">
-                
-            </div>
-            <div class="panel-footer">
-                <input  id="mensagem_input" type="text" class="form-control" placeholder="Escreva aqui..." />
-            </div>
-          </div>
+            </div><!-- row -->
+        </div><!-- container -->
+
+
+    <div id="r">
+        <div class="container">
+            <div class="row centered">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <h4>SOBRE O PROJETO/CARTÓRIO CHATBOT</h4>
+                    <p>O cartório chatbot é um projeto lançado em 2018 pelos alunos de Ciências da Computação da USJT, que visa melhoria nos meios de comunicação dentro de serviços referente a Cartório.
+
+                    Temos como objetivo o desenvolvimento de um chatbot, software que trabalha e gerencia trocas de menssagem, de forma fácil e segura.
+                    Para sustentar a qualidade dos serviços prestados, dispomos de infraestrutura tecnológica que garantem integridade, confidencialidade e inviolabilidade das informações envolvidas.</p>
+                </div>
+            </div><!-- row -->
+        </div><!-- container -->
+    </div><! -- r wrap -->
+
+    <!--  Equipe -->
+    <div id = "eq" >
+        <div class="container w" style="margin-top: 100px;">
+            <div class="row centered">
+                    <h4>NOSSA EQUIPE</h4>
+                    <br></br>
+                <div class="col-lg-4">
+                    <img class="img-circle" src="{{ asset('images/pic2.jpg') }}" width="110" height="110" alt="">
+                    <h4>Victoria Chelsea</h4>
+                    <p>Sócio fundadora da empresa Cartório Chatbot<br>
+                    Ciêntista da Computação<br>
+                    Brasileira</p>
+                    <p><a href="#">@Victoria_Chelsea</a></p>
+                </div><!-- col-lg-3 -->
+
+                <div class="col-lg-4">
+                    <img class="img-circle" src="{{ asset('images/pic3.jpg') }}" width="110" height="110" alt="">
+                    <h4>Bruna Gabriella</h4>
+                    <p>Sócio fundadora da empresa Cartório Chatbot<br>
+                    Ciêntista da Computação<br>
+                    Brasileira</p>
+                    <p><a href="#">@Bruna_Gabriella</a></p>
+                </div><!-- col-lg-3 -->
+
+                <div class="col-lg-4">
+                    <img class="img-circle" src="{{ asset('images/pic4.jpg') }}" width="110" height="110" alt="">
+                    <h4>Lucas Gustavo</h4>
+                    <p>Sócio fundador da empresa Cartório Chatbot<br>
+                    Ciêntista da Computação<br>
+                    Brasileiro</p>
+                    <p><a href="#">@Lucas_Gustavo</a></p>
+                </div><!-- col-lg-3 -->
+                <div class="row centered">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <h4>"Tudo o que é simples, que simplifica a vida de todos nós, merece destaque."</b></h4>
+                    </div>
+                </div><!-- row -->
+
+            </div><!-- row -->
+        </div><!-- container -->
+    </div><!-- eq -->
+
+    <!-- Serviços -->
+    <div id = ser>
+
+        <div class="container w">
+            <div class="row centered">
+                <br><br>
+                <div class="col-lg-4">
+                    <i class="fa fa-desktop"></i>
+                    <h4>WEB DESIGN</h4>
+                    <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
+                </div><!-- col-lg-4 -->
+
+                <div class="col-lg-4">
+                    <i class="fa fa-cogs"></i>
+                    <h4>WEB DEVELOPMENT</h4>
+                    <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
+                </div><!-- col-lg-4 -->
+
+                <div class="col-lg-4">
+                    <i class="fa fa-eye"></i>
+                    <h4>SEO SERVICES</h4>
+                    <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
+                </div><!-- col-lg-4 -->
+            </div><!-- row -->
+            <br>
+            <div class="row centered">
+                <br><br>
+                <div class="col-lg-4">
+                    <i class="fa fa-heart"></i>
+                    <h4>SOCIAL MEDIA</h4>
+                    <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
+                </div><!-- col-lg-4 -->
+
+                <div class="col-lg-4">
+                    <i class="fa fa-shopping-cart"></i>
+                    <h4>E-COMMERCE</h4>
+                    <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
+                </div><!-- col-lg-4 -->
+
+                <div class="col-lg-4">
+                    <i class="fa fa-cloud"></i>
+                    <h4>CLOUD SERVICES</h4>
+                    <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
+                </div><!-- col-lg-4 -->
+            </div><!-- row -->
         </div>
-    </div>
-    <hr>
-    <footer>
-        <p>&copy; 2018 Company, Inc.</p>
-    </footer>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-</div>
+    </div><!-- ser -->
+
+
+    <!-- FOOTER -->
+    <div id="f">
+        <div class="container">
+            <div class="row centered">
+                <a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-facebook"></i></a><a href="#"><i class="fa fa-dribbble"></i></a>
+        
+            </div><!-- row -->
+        </div><!-- container -->
+    </div><!-- Footer -->
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="clone_usuario_mensagem" style="display: none;">
     <div class="row msg_container base_sent">
         <div class="col-md-10 col-xs-10">
